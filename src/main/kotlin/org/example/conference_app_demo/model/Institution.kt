@@ -1,9 +1,11 @@
 package org.example.conference_app_demo.model
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
+@Table(name = "institutions")
 data class Institution(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,8 +18,10 @@ data class Institution(
     var url: String,
 
     @Column(nullable = false, updatable = false)
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 )

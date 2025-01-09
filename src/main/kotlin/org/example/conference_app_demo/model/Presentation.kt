@@ -1,9 +1,11 @@
 package org.example.conference_app_demo.model
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
+@Table(name = "presentations")
 data class Presentation(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,11 +18,7 @@ data class Presentation(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
-    var schedule: Schedule? = null,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "conference_id")
-    var conference: Conference? = null,
+    var schedule: Schedule,
 
     @ManyToMany
     @JoinTable(
@@ -31,9 +29,11 @@ data class Presentation(
     var users: MutableList<User> = mutableListOf(),
 
     @Column(nullable = false, updatable = false)
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 
 )
