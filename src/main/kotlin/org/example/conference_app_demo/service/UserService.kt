@@ -4,6 +4,7 @@ import org.example.conference_app_demo.dto.UserDTO
 import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.repository.UserRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class UserService(private val userRepository: UserRepository) {
@@ -11,6 +12,36 @@ class UserService(private val userRepository: UserRepository) {
 
     fun findByIds(ids: List<Long>): MutableList<User> {
         return userRepository.findAllById(ids)
+    }
+
+    fun findAll(): List<User> {
+        return userRepository.findAll()
+    }
+
+    fun findById(id: Long): User? {
+        return userRepository.findById(id).orElseThrow { Exception("User with id $id not found") }
+    }
+
+    fun deleteById(id: Long) {
+        if(userRepository.findById(id).isEmpty) throw Exception()
+        userRepository.deleteById(id)
+    }
+
+    fun save(user: User): User {
+        return userRepository.save(user)
+    }
+
+    fun update(id: Long, user: User): User {
+        val existingUser = findById(id) ?: throw Exception("User with id $id not found")
+        existingUser.name = user.name
+        existingUser.surname = user.surname
+        existingUser.title = user.title
+        existingUser.email = user.email
+        existingUser.phone = user.phone
+        existingUser.institution = user.institution
+        existingUser.role = user.role
+        existingUser.updatedAt = LocalDateTime.now()
+        return userRepository.save(existingUser)
     }
 
 

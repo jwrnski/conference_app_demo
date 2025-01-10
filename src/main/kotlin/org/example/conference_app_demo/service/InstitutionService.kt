@@ -4,6 +4,7 @@ import org.example.conference_app_demo.dto.InstitutionDTO
 import org.example.conference_app_demo.model.Institution
 import org.example.conference_app_demo.repository.InstitutionRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class InstitutionService(private val institutionRepository: InstitutionRepository) {
@@ -33,7 +34,7 @@ class InstitutionService(private val institutionRepository: InstitutionRepositor
         existingInstitution.city = institution.city
         existingInstitution.logo = institution.logo
         existingInstitution.url = institution.url
-        existingInstitution.updatedAt = institution.updatedAt
+        existingInstitution.updatedAt = LocalDateTime.now()
 
         return institutionRepository.save(existingInstitution)
     }

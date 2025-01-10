@@ -3,10 +3,42 @@ package org.example.conference_app_demo.service
 import org.example.conference_app_demo.dto.ScheduleDTO
 import org.example.conference_app_demo.model.Conference
 import org.example.conference_app_demo.model.Schedule
+import org.example.conference_app_demo.repository.ScheduleRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Service
-class ScheduleService(private val presentationService: PresentationService) {
+class ScheduleService(  private val presentationService: PresentationService,
+                        private val scheduleRepository: ScheduleRepository) {
+
+
+    fun save(schedule: Schedule): Schedule {
+        return scheduleRepository.save(schedule)
+    }
+
+    fun findById(id: Long): Schedule {
+        return scheduleRepository.findById(id).orElseThrow{Exception("Schedule not found")}
+    }
+
+    fun findAll(): List<Schedule> {
+        return scheduleRepository.findAll()
+    }
+
+    fun deleteById(id: Long) {
+        return scheduleRepository.deleteById(id)
+    }
+
+    fun update(id: Long, schedule: Schedule): Schedule {
+        val existingSchedule = findById(schedule.id)
+        existingSchedule.startDate = schedule.startDate
+        existingSchedule.endDate = schedule.endDate
+        existingSchedule.updatedAt = LocalDateTime.now()
+        existingSchedule.presentations = schedule.presentations
+        existingSchedule.conference = schedule.conference
+        return scheduleRepository.save(existingSchedule)
+    }
+
 
     fun toDTO(schedule: Schedule): ScheduleDTO {
         return ScheduleDTO(
