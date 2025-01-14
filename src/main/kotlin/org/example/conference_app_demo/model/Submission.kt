@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "submissions")
-data class Submission(
+class Submission(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,

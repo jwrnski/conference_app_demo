@@ -4,11 +4,11 @@ import org.example.conference_app_demo.model.Conference
 import org.example.conference_app_demo.service.ConferenceService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
-import org.springframework.validation.annotation.Validated
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-@RestController
-@RequestMapping("/api/v1/conferences")
+@Controller
+@RequestMapping("/conferences")
 class ConferenceController(private val conferenceService: ConferenceService) {
 
     @PostMapping
@@ -29,10 +29,11 @@ class ConferenceController(private val conferenceService: ConferenceService) {
         return ResponseEntity.ok(conference);
     }
 
-    @GetMapping
-    fun getAllConferences(): ResponseEntity<List<Conference>> {
+    @GetMapping()
+    fun getAllConferences(model: Model): String {
         val conferences = conferenceService.findAll();
-        return ResponseEntity.ok(conferences);
+        model.addAttribute("conferences", conferences);
+        return "conferences";
     }
 
     @DeleteMapping("/{id}")

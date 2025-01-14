@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "institutions")
-data class Institution(
+class Institution(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,

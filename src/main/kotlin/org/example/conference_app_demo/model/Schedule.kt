@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "schedules")
-data class Schedule(
+class Schedule(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,

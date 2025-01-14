@@ -17,8 +17,21 @@ class SecurityConfig {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .authorizeHttpRequests { it.requestMatchers("/**").permitAll() } // Allow all endpoints without authentication
+            .authorizeHttpRequests { it
+                .requestMatchers("/**", "/css/**", "/js/**", "/images/**").permitAll()
+                .anyRequest().permitAll()
+            }
             .csrf { it.disable() }
+            /*.formLogin { it
+                .loginPage("/login") // Custom login page
+                .defaultSuccessUrl("/", true) // Redirect to homepage after log in
+                .permitAll() // Allow anyone to access the login page
+            }
+            .logout { it
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/") // Redirect to homepage after logout
+                .permitAll() // Allow anyone to log out
+            }*/
         return http.build()
     }
 
@@ -26,7 +39,7 @@ class SecurityConfig {
     fun userDetailsService(): UserDetailsService {
         val user: UserDetails = User
             .withUsername("admin")
-            .password("{noop}admin") // {noop} indicates plain text password
+            .password("{noop}admin")
             .roles("USER")
             .build()
         return InMemoryUserDetailsManager(user)
