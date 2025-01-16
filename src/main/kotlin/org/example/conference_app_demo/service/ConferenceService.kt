@@ -34,7 +34,8 @@ class ConferenceService(private val conferenceRepository: ConferenceRepository,
         existingConference.startDate = updatedConference.startDate
         existingConference.endDate = updatedConference.endDate
         existingConference.tags = updatedConference.tags
-        existingConference.schedules = updatedConference.schedules
+        existingConference.schedules.clear()
+        existingConference.schedules.addAll(updatedConference.schedules)
         existingConference.updatedAt = LocalDateTime.now()
 
         return conferenceRepository.save(existingConference)

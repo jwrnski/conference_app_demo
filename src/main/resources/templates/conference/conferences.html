@@ -5,11 +5,11 @@
 <div th:replace="~{fragments/nav :: nav}"></div>
 <main class="flex-grow">
     <div class="container mx-auto p-6">
-    <h1>All Conferences</h1>
+    <h1 class="text-2xl font-bold mb-4">All Conferences</h1>
         <ul >
             <li th:each="conference : ${conferences}"
                 class="hover:text-yellow-600 transition-colors duration-200 hover:underline">
-                <a th:href="@{/{id}(id=${conference.id})}"
+                <a th:href="@{/conferences/{id}(id=${conference.id})}"
                    hx-target="#main-content"
                    hx-swap="innerHTML"
                    >
@@ -17,6 +17,9 @@
                 </a>
             </li>
         </ul>
+    </div>
+    <div class="container mx-auto p-6 font-bold mb-4" >
+        <a href="/conferences/create-conference" role="button">Create a new conference</a>
     </div>
 </main>
 </body>

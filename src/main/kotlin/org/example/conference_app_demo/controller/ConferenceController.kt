@@ -12,34 +12,47 @@ import org.springframework.web.bind.annotation.*
 class ConferenceController(private val conferenceService: ConferenceService) {
 
     @PostMapping
-    fun createConference(@RequestBody conference: Conference): ResponseEntity<Conference> {
+    fun createConference(@ModelAttribute conference: Conference): String {
         val savedConference = conferenceService.save(conference);
-        return ResponseEntity.status(201).body(savedConference);
+        return "redirect:conference/conferences";
     }
 
-    @PutMapping("/{id}")
-    fun updateConference(@PathVariable id:Long, @RequestBody conference: Conference): ResponseEntity<Conference> {
-        val updatedConference = conferenceService.update(conference, id);
-        return ResponseEntity.ok(updatedConference);
+    @GetMapping("/create-conference")
+    fun createConferencePage(): String {
+        return "conference/create-conference"
+    }
+
+    @PutMapping("/edit/{id}")
+    fun updateConference(@PathVariable id:Long, @ModelAttribute conference: Conference): String {
+        conferenceService.update(conference, id);
+        return "redirect:/conferences/$id";
     }
 
     @GetMapping("/{id}")
-    fun getConferenceById(@PathVariable id: Long): ResponseEntity<Conference> {
-        val conference = conferenceService.findById(id);
-        return ResponseEntity.ok(conference);
+    fun getConferenceDetails(@PathVariable id: Long, model: Model): String {
+        val conference = conferenceService.findById(id)
+        model.addAttribute("conference", conference)
+        return "conference/conference-details"
+    }
+
+    @GetMapping("/edit/{id}")
+    fun getEditConferencePage(@PathVariable id: Long, model: Model): String {
+        val conference = conferenceService.findById(id)
+        model.addAttribute("conference", conference)
+        return "conference/edit-conference"
     }
 
     @GetMapping()
     fun getAllConferences(model: Model): String {
         val conferences = conferenceService.findAll();
         model.addAttribute("conferences", conferences);
-        return "conferences";
+        return "conference/conferences";
     }
 
     @DeleteMapping("/{id}")
-    fun deleteConferenceById(@PathVariable id: Long): ResponseEntity<Void> {
+    fun deleteConferenceById(@PathVariable id: Long): String{
         conferenceService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:conference/conferences";
     }
 
 }
