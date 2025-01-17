@@ -20,6 +20,9 @@ class User(
     var institution: String,
     var role: Role,
 
+    @ManyToMany(mappedBy = "users") // Reference back to presentations
+    var presentations: MutableList<Presentation> = mutableListOf(),
+
     @Column(nullable = false, updatable = false)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     var createdAt: LocalDateTime = LocalDateTime.now(),

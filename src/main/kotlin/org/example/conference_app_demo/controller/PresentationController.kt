@@ -1,31 +1,55 @@
 package org.example.conference_app_demo.controller
 
-import org.example.conference_app_demo.model.Conference
 import org.example.conference_app_demo.model.Presentation
+import org.example.conference_app_demo.service.ConferenceService
 import org.example.conference_app_demo.service.PresentationService
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@Controller
 @RequestMapping("/presentations")
-class PresentationController(private val presentationService: PresentationService) {
+class PresentationController(
+    private val presentationService: PresentationService,
+    private val conferenceService: ConferenceService
+) {
 
     @GetMapping
-    fun getAllPresentations(): ResponseEntity<List<Presentation>> {
+    fun getAllPresentations(model: Model): String {
         val presentations = presentationService.findAll();
-        return ResponseEntity.ok(presentations);
+        model.addAttribute("presentations", presentations);
+        return "presentation/presentations";
     }
 
     @GetMapping("/{id}")
-    fun getPresentationById(@PathVariable id: Long): ResponseEntity<Presentation> {
+    fun getPresentationById(@PathVariable id: Long, model: Model): String {
         val presentation = presentationService.findById(id);
-        return ResponseEntity.ok(presentation);
+        model.addAttribute("presentation", presentation);
+        return "presentation/presentation-details";
+    }
+
+    @GetMapping("/create-presentation")
+    fun createPresentationPage(@RequestParam conferenceId: Long, model: Model): String {
+        model.addAttribute("conferenceId", conferenceId);
+        val conferenceName = conferenceService.getNameById(conferenceId)
+        model.addAttribute("conferenceName", conferenceName)
+        return "presentation/create-presentation"
+    }
+
+    @GetMapping("/edit/{id}")
+    fun getEditPresentationPage(@PathVariable id: Long, model: Model): String {
+        val presentation = presentationService.findById(id)
+        model.addAttribute("presentation", presentation)
+        return "presentation/edit-presentation"
     }
 
     @PostMapping
-    fun createPresentation(@RequestBody presentation: Presentation): ResponseEntity<Presentation> {
-        val savedPresentation = presentationService.save(presentation);
-        return ResponseEntity.status(201).body(savedPresentation);
+    fun createPresentation(@ModelAttribute presentation: Presentation, @RequestParam("conferenceId") conferenceId: Long): String {
+        val conference = conferenceService.findById(conferenceId)
+        presentation.conference = conference
+        presentationService.save(presentation)
+        return "redirect:/conferences/$conferenceId"
     }
 
     @DeleteMapping("/{id}")
@@ -34,7 +58,7 @@ class PresentationController(private val presentationService: PresentationServic
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/edit/{id}")
     fun updatePresentation(@PathVariable id: Long, @RequestBody presentation: Presentation): ResponseEntity<Presentation>{
         val updatedPresentation = presentationService.update(id, presentation);
         return ResponseEntity.ok(updatedPresentation);

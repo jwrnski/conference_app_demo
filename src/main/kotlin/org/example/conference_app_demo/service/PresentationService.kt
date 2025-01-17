@@ -41,7 +41,7 @@ class PresentationService(private val userService: UserService, private val pres
 
 
 
-    fun toDTO(presentation: Presentation): PresentationDTO {
+    /*fun toDTO(presentation: Presentation): PresentationDTO {
         return PresentationDTO(
             id = presentation.id,
             title = presentation.title,
@@ -65,5 +65,5 @@ class PresentationService(private val userService: UserService, private val pres
             schedule = schedule, // Pass the parent Schedule entity
             users = userService.findByIds(dto.userIds) // Use userService to resolve User entities
         )
-    }
+    }*/
 }

@@ -40,7 +40,7 @@ class ScheduleService(  private val presentationService: PresentationService,
     }
 
 
-    fun toDTO(schedule: Schedule): ScheduleDTO {
+    /*fun toDTO(schedule: Schedule): ScheduleDTO {
         return ScheduleDTO(
             id = schedule.id,
             conferenceId = schedule.conference.id,
@@ -68,5 +68,5 @@ class ScheduleService(  private val presentationService: PresentationService,
 
 
         return schedule
-    }
+    }*/
 }

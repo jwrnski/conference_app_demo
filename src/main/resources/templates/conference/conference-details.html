@@ -24,6 +24,8 @@
         </p>
         <a href="/conferences" class="text-blue-500 hover:underline mt-10">Back to all conferences</a>
 
+        // list of presentations
+
         <div class="mt-10 flex space-x-4">
             <!-- Edit Button -->
             <a th:href="@{/conferences/edit/{id}(id=${conference.id})}"
@@ -40,6 +42,10 @@
                     Delete
                 </button>
             </form>
+            <a th:href="@{/presentations/create-presentation(conferenceId=${conference.id})}"
+                style="background-color: darkorange; color: white; padding: 7px; border-radius: 5px;">
+                Create Presentation
+            </a>
         </div>
 
     </div>

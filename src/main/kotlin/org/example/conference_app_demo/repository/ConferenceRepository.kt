@@ -9,5 +9,4 @@ import java.util.*
 @Repository
 interface ConferenceRepository : JpaRepository<Conference, Long> {
     fun existsByName(name: String): Boolean
-
 }

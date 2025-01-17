@@ -3,6 +3,7 @@ package org.example.conference_app_demo.model
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Entity
 @Table(name = "presentations")
@@ -13,12 +14,16 @@ class Presentation(
 
     var title: String,
     var description: String,
-    var startTime: LocalDateTime,
-    var endTime: LocalDateTime,
+    var startTime: LocalTime,
+    var endTime: LocalTime,
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conference_id")
+    var conference: Conference? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
-    var schedule: Schedule,
+    var schedule: Schedule? = null,
 
     @ManyToMany
     @JoinTable(

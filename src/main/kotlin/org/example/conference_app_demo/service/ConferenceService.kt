@@ -55,11 +55,18 @@ class ConferenceService(private val conferenceRepository: ConferenceRepository,
 
         conferenceRepository.deleteById(id);
     }
+
+    fun getNameById(id: Long): String {
+        return conferenceRepository.findById(id)
+            .map { it.name } // Map the result to the conference name
+            .orElseThrow { Exception("Conference with id $id not found") }
+    }
+
     fun delete(conference: Conference) = conferenceRepository.delete(conference);
     fun count() = conferenceRepository.count();
     fun existsById(id: Long) = conferenceRepository.existsById(id);
 
-    fun toDTO(conference: Conference): ConferenceDTO {
+    /*fun toDTO(conference: Conference): ConferenceDTO {
         return ConferenceDTO(
             id = conference.id,
             name = conference.name,
@@ -92,7 +99,7 @@ class ConferenceService(private val conferenceRepository: ConferenceRepository,
         conference.schedules = dto.schedules.map { scheduleService.toEntity(it, conference) }.toMutableList()
 
         return conference
-    }
+    }*/
 
 
 }

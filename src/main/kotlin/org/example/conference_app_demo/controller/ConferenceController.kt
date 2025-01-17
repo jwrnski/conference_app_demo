@@ -13,7 +13,7 @@ class ConferenceController(private val conferenceService: ConferenceService) {
 
     @PostMapping
     fun createConference(@ModelAttribute conference: Conference): String {
-        val savedConference = conferenceService.save(conference);
+        conferenceService.save(conference);
         return "redirect:conference/conferences";
     }
 
