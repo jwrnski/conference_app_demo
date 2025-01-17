@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{fragments/header :: header}"></div>
+<body class="flex flex-col min-h-screen">
+<div th:replace="~{fragments/nav :: nav}"></div>
+<main class="flex-grow">
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">All Presentations</h1>
+        <ul>
+            <li th:each="presentation : ${presentations}"
+                class="hover:text-yellow-600 transition-colors duration-200 hover:underline">
+                <a th:href="@{/presentations/{id}(id=${presentation.id})}"
+                   hx-target="#main-content"
+                   hx-swap="innerHTML"
+                >
+                    <span th:text="${presentation.title}">Conference Name</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="container mx-auto p-6 font-bold mb-4" >
+        <a href="/presentations/create-presentation" role="button">Create a new presentation</a>
+    </div>
+</main>
+</body>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</html>

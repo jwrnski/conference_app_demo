@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{fragments/header :: header}"></div>
+<body class="flex flex-col min-h-screen bg-gray-100"> <!-- Added a background for better visibility -->
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="flex-grow">
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Create a presentation for</h1>
+        <h1 class="text-2xl font-bold mb-4"> <span th:text="${conferenceName}"></span></h1>
+        <form th:action="@{/presentations}" method="post" class="bg-white p-6 rounded shadow-sm">
+            <input type="hidden" name="conferenceId" th:value="${conferenceId}" />
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
+                    Title
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="title"
+                        name="title"
+                        type="text"
+                        placeholder="Presentation Title"
+                        required>
+            </div>
+
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
+                    City
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="city"
+                        name="city"
+                        type="text"
+                        placeholder="City"
+                        required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                    Description
+                </label>
+                <textarea
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="description"
+                        name="description"
+                        placeholder="Conference Description"
+                        rows="3"
+                        required></textarea>
+            </div>
+
+            <!-- Start Date Field -->
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="startTime">
+                    Start Time
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="startTime"
+                        name="startTime"
+                        type="time"
+                        required>
+            </div>
+
+            <!-- End Date Field -->
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="endTime">
+                    End Time
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="endTime"
+                        name="endTime"
+                        type="time"
+                        required>
+            </div>
+            // conferenceId
+            // schedule?
+            <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
+                    type="submit"
+            >
+                Create Presentation
+            </button>
+        </form>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

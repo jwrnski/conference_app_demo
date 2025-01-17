@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{fragments/header :: header}"></div>
+<body class="flex flex-col min-h-screen bg-gray-100"> <!-- Added a background for better visibility -->
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="flex-grow">
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Edit <span th:text="${conference.name}"></span></h1>
+        <form th:action="@{/conferences/edit/{id}(id=${conference.id})}" method="post" class="bg-white p-6 rounded shadow-sm">
+            <input type="hidden" name="_method" value="put"/>
+            <input type="hidden" name="id" th:value="${conference.id}" />
+            <!-- Name Field -->
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                    Name
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="name"
+                        name="name"
+                        type="text"
+                        placeholder="Conference Name"
+                        th:value="${conference.name}"
+                        required>
+            </div>
+
+            <!-- City Field -->
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
+                    City
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="city"
+                        name="city"
+                        type="text"
+                        placeholder="City"
+                        th:value="${conference.city}"
+                        required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="url">
+                    url
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="url"
+                        name="url"
+                        type="text"
+                        placeholder="City"
+                        th:value="${conference.url}"
+                        required>
+            </div>
+
+            <!-- Description Field -->
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                    Description
+                </label>
+                <textarea
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="description"
+                        name="description"
+                        placeholder="Conference Description"
+                        th:text="${conference.description}"
+                        rows="3"
+                        required></textarea>
+            </div>
+
+            <!-- Start Date Field -->
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">
+                    Start Date
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="startDate"
+                        name="startDate"
+                        type="datetime-local"
+                        th:value="${conference.startDate}"
+                        required>
+            </div>
+
+            <!-- End Date Field -->
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="endDate">
+                    End Date
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="endDate"
+                        name="endDate"
+                        type="datetime-local"
+                        th:value="${conference.endDate}"
+                        required>
+            </div>
+
+            <!-- Keywords Dropdown -->
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="tags">
+                    Select Keyword
+                </label>
+                <select
+                        id="tags"
+                        name="tags"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                    <option value="Technology" th:selected="${conference.tags == 'Technology'}">Technology</option>
+                    <option value="Computer Science" th:selected="${conference.tags == 'Computer Science'}">Computer Science</option>
+                    <option value="Electronics" th:selected="${conference.tags == 'Electronics'}">Electronics</option>
+                    <option value="Science" th:selected="${conference.tags == 'Science'}">Science</option>
+                    <option value="Programming" th:selected="${conference.tags == 'Programming'}">Programming</option>
+                </select>
+            </div>
+            <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
+                    type="submit"
+            >
+                Edit Conference
+            </button>
+        </form>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
