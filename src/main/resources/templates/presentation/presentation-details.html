@@ -17,9 +17,9 @@
             End Time: <span th:text="${presentation.endTime}"></span>
         </p>
         <p>
-            Conference: <span th:text="${presentation.conference}"></span>
+            Conference: <span th:text="${presentation.conference.name}"></span>
         </p>
-        <p class="font-bold text-lg">Authors:</p>
+        <p>Authors:</p>
         <ul>
             <li th:each="user : ${presentation.users}"
                 class="hover:text-yellow-600 transition-colors duration-200 hover:underline">

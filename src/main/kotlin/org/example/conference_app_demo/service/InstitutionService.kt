@@ -18,7 +18,7 @@ class InstitutionService(private val institutionRepository: InstitutionRepositor
         return institutionRepository.findAll()
     }
 
-    fun findById(id: Long): Institution? {
+    fun findById(id: Long): Institution{
         return institutionRepository.findById(id).orElseThrow { Exception("Institution with id $id not found") }
     }
 
@@ -40,7 +40,7 @@ class InstitutionService(private val institutionRepository: InstitutionRepositor
     }
 
 
-    fun toDTO(institution: Institution): InstitutionDTO {
+    /*fun toDTO(institution: Institution): InstitutionDTO {
         return InstitutionDTO(
             id = institution.id,
             name = institution.name,
@@ -64,5 +64,5 @@ class InstitutionService(private val institutionRepository: InstitutionRepositor
             createdAt = dto.createdAt,
             updatedAt = dto.updatedAt
         )
-    }
+    }*/
 }

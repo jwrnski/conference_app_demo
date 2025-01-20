@@ -14,8 +14,8 @@ class Institution(
     var name: String,
     var country: String,
     var city: String,
-    var logo: String,
-    var url: String,
+    var logo: String? = null,
+    var url: String? = null,
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")

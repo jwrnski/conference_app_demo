@@ -17,7 +17,9 @@ class User(
     var email: String,
     var password: String,
     var phone: String,
-    var institution: String,
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "institution_id", nullable = false)
+    var institution: Institution,
     var role: Role,
 
     @ManyToMany(mappedBy = "users") // Reference back to presentations

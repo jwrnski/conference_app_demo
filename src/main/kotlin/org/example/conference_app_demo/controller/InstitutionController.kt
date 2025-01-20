@@ -3,9 +3,10 @@ package org.example.conference_app_demo.controller
 import org.example.conference_app_demo.model.Institution
 import org.example.conference_app_demo.service.InstitutionService
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@Controller
 @RequestMapping("/institutions")
 class InstitutionController(private val institutionService: InstitutionService) {
 
@@ -21,10 +22,15 @@ class InstitutionController(private val institutionService: InstitutionService) 
         return ResponseEntity.ok(institution);
     }
 
-    @PostMapping("/")
-    fun saveInstitution(@RequestBody institution: Institution): ResponseEntity<Institution> {
-        val savedInstitution = institutionService.save(institution);
-        return ResponseEntity.status(201).body(savedInstitution);
+    @GetMapping("/create-institution")
+    fun createInstitutionPage(): String {
+        return "institution/create-institution"
+    }
+
+    @PostMapping()
+    fun saveInstitution(@ModelAttribute institution: Institution): String {
+        institutionService.save(institution);
+        return "redirect:/homepage";
     }
 
     @DeleteMapping("/{id}")

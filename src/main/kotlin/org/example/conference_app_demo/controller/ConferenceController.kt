@@ -14,7 +14,7 @@ class ConferenceController(private val conferenceService: ConferenceService) {
     @PostMapping
     fun createConference(@ModelAttribute conference: Conference): String {
         conferenceService.save(conference);
-        return "redirect:conference/conferences";
+        return "redirect:/conferences";
     }
 
     @GetMapping("/create-conference")

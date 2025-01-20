@@ -1,6 +1,5 @@
 package org.example.conference_app_demo.service
 
-import org.example.conference_app_demo.dto.SubmissionDTO
 import org.example.conference_app_demo.model.Submission
 import org.example.conference_app_demo.repository.SubmissionRepository
 import org.springframework.stereotype.Service
@@ -29,26 +28,25 @@ class SubmissionService(private val submissionRepository: SubmissionRepository) 
 
     fun update(id: Long, submission: Submission): Submission {
         val existingSubmission = findById(id) ?: throw Exception("Submission with id $id not found")
-        existingSubmission.abstractTitle = submission.abstractTitle
-        existingSubmission.content = submission.content
+        existingSubmission.paperTitle = submission.paperTitle
+        existingSubmission.abstract = submission.abstract
         existingSubmission.author = submission.author
         existingSubmission.conference = submission.conference
-        existingSubmission.topic = submission.topic
+        existingSubmission.category = submission.category
         existingSubmission.status = submission.status
-        existingSubmission.rating = submission.rating
         existingSubmission.comments = submission.comments
         existingSubmission.updatedAt = LocalDateTime.now()
         return submissionRepository.save(existingSubmission)
     }
 
-    fun toDTO(submission: Submission): SubmissionDTO {
+    /*fun toDTO(submission: Submission): SubmissionDTO {
         return SubmissionDTO(
             id = submission.id,
-            abstractTitle = submission.abstractTitle,
+            abstractTitle = submission.paperTitle,
             content = submission.content,
             author = submission.author,
             conference = submission.conference,
-            topic = submission.topic,
+            topic = submission.category,
             status = submission.status,
             rating = submission.rating,
             comments = submission.comments,
@@ -59,16 +57,16 @@ class SubmissionService(private val submissionRepository: SubmissionRepository) 
     fun toEntity(dto: SubmissionDTO): Submission {
         return Submission(
             id = dto.id,
-            abstractTitle = dto.abstractTitle,
+            paperTitle = dto.abstractTitle,
             content = dto.content,
             author = dto.author,
             conference = dto.conference,
-            topic = dto.topic,
+            category = dto.topic,
             status = dto.status,
             rating = dto.rating,
             comments = dto.comments,
             createdAt = dto.createdAt,
             updatedAt = dto.updatedAt
         )
-    }
+    }*/
 }

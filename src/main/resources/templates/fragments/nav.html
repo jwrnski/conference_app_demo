@@ -1,4 +1,6 @@
-<div th:fragment="nav">
+<div th:fragment="nav"
+     xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+>
     <nav class="bg-blue-600 shadow-lg">
         <div class="container mx-auto flex justify-between items-center py-4 px-6">
             <!-- Left-aligned link -->
@@ -38,6 +40,44 @@
                             class="text-white font-medium hover:text-yellow-300 transition-colors duration-200"
                     >
                         Presentations
+                    </a>
+                </li>
+                <li class="hover:underline">
+                    <a
+                            th:href="@{/submissions}"
+                            hx-target="main-content"
+                            hx-swap="innerHTML"
+                            class="text-white font-medium hover:text-yellow-300 transition-colors duration-200"
+                    >
+                        Submissions
+                    </a>
+                </li>
+                <li class="hover:underline">
+                    <a
+                            th:href="@{/institutions/create-institution}"
+                            hx-target="main-content"
+                            hx-swap="innerHTML"
+                            class="text-white font-medium hover:text-yellow-300 transition-colors duration-200"
+                    >
+                        Add institution
+                    </a>
+                </li>
+                <li class="hover:underline">
+                    <a
+                            sec:authorize="isAnonymous()"
+                            th:href="@{/auth/login}"
+                            hx-target="main-content"
+                            hx-swap="innerHTML"
+                            class="text-white font-medium hover:text-yellow-300 transition-colors duration-200"
+                    >
+                        Login
+                    </a>
+                    <a
+                            sec:authorize="isAuthenticated()"
+                            th:href="@{/auth/logout}"
+                            class="text-white font-medium hover:text-red-500 transition-colors duration-200"
+                    >
+                        Logout
                     </a>
                 </li>
             </ul>

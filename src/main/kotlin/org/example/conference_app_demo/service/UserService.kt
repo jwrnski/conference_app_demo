@@ -4,6 +4,7 @@ import org.example.conference_app_demo.dto.UserDTO
 import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.repository.UserRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -18,8 +19,12 @@ class UserService(private val userRepository: UserRepository) {
         return userRepository.findAll()
     }
 
-    fun findById(id: Long): User? {
+    fun findById(id: Long): User {
         return userRepository.findById(id).orElseThrow { Exception("User with id $id not found") }
+    }
+
+    fun findByEmail(email: String): User? {
+        return userRepository.findByEmail(email)
     }
 
     fun deleteById(id: Long) {
@@ -27,6 +32,7 @@ class UserService(private val userRepository: UserRepository) {
         userRepository.deleteById(id)
     }
 
+    @Transactional
     fun save(user: User): User {
         return userRepository.save(user)
     }
@@ -45,7 +51,7 @@ class UserService(private val userRepository: UserRepository) {
     }
 
 
-    fun toDTO(user: User): UserDTO {
+    /*fun toDTO(user: User): UserDTO {
         return UserDTO(
             id = user.id,
             name = user.name,
@@ -75,5 +81,5 @@ class UserService(private val userRepository: UserRepository) {
             createdAt = dto.createdAt,
             updatedAt = dto.updatedAt
         )
-    }
+    }*/
 }
