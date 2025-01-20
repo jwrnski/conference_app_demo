@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{fragments/header :: header}"></div>
+<body class="flex flex-col min-h-screen bg-gray-100"> <!-- Added a background for better visibility -->
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="flex-grow">
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Submit your paper for</h1>
+        <h1 class="text-2xl font-bold mb-4"> <span th:text="${conferenceName}"></span></h1>
+        <form th:action="@{/submissions}" method="post" class="bg-white p-6 rounded shadow-sm">
+            <input type="hidden" name="conferenceId" th:value="${conferenceId}"/>
+            <input type="hidden" name="userId" th:value="${userId}"/>
+            <input type="hidden" name="comments" th:value="${comments}"/>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="paperTitle">
+                    Title
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="paperTitle"
+                        name="paperTitle"
+                        type="text"
+                        placeholder="Presentation Title"
+                        required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="abstract">
+                    Abstract
+                </label>
+                <textarea
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="abstract"
+                        name="abstract"
+                        placeholder="Paper abstract"
+                        rows="3"
+                        required></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="filePath">
+                    Select file
+                </label>
+                <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="filePath"
+                        name="filePath"
+                        type="file"
+                        required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="category">
+                    Select Keyword
+                </label>
+                <select
+                        id="category"
+                        name="category"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required>
+                    <option value="" disabled selected>Select a keyword...</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Science">Science</option>
+                    <option value="Programming">Programming</option>
+                </select>
+            </div>
+
+            <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
+                    type="submit">
+                Submit Paper
+            </button>
+
+        </form>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

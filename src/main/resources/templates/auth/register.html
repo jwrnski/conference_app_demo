@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{fragments/header :: header}"></div>
+<body class="flex flex-col min-h-screen bg-gray-100">
+
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="flex-grow">
+  <div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center">Register</h1>
+
+    <form th:action="@{/auth/register}" method="post" class="bg-white p-6 rounded shadow-md">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">First Name</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="name" name="name" type="text" placeholder="Enter your first name" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="surname">Last Name</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="surname" name="surname" type="text" placeholder="Enter your last name" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Title</label>
+        <select id="title" name="title" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
+          <option value="">-- Select Title --</option>
+          <option th:each="t : ${titles}" th:value="${t}" th:text="${t}"></option>
+        </select>
+      </div>
+
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="email" name="email" type="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="password" name="password" type="password" placeholder="Enter your password" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">Phone</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="phone" name="phone" type="text" placeholder="Enter your phone number" required>
+      </div>
+
+      <!-- Institution Dropdown -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="institution">Institution</label>
+        <select id="institution" name="institutionId" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
+          <option value="">-- Select Institution --</option>
+          <option th:each="institution : ${institutions}"
+                  th:value="${institution.id}"
+                  th:text="${institution.name}"></option>
+        </select>
+      </div>
+
+      <!-- Role Dropdown -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="role">Role</label>
+        <select id="role" name="role" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
+          <option value="">-- Select Role --</option>
+          <option th:each="role : ${roles}"
+                  th:value="${role}"
+                  th:text="${role}"></option>
+        </select>
+      </div>
+
+      <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
+              type="submit">
+        Register
+      </button>
+    </form>
+  </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

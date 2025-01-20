@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{fragments/header :: header}"></div>
+<body class="flex flex-col min-h-screen bg-gray-100">
+
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="flex-grow">
+  <div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center">Login</h1>
+
+    <form th:action="@{/auth/login}" method="post" class="bg-white p-6 rounded shadow-md">
+      <!-- Email -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="email" name="email" type="email" placeholder="Enter your email" required>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="password" name="password" type="password" placeholder="Enter your password" required>
+      </div>
+
+      <!-- Login Button -->
+      <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
+              type="submit">
+        Login
+      </button>
+    </form>
+
+    <!-- Registration Link -->
+    <p class="mt-4 text-center text-gray-600">
+      Don't have an account?
+      <a href="/auth/register" class="text-blue-500 hover:underline">Register Here</a>
+    </p>
+
+    <!-- Error Message -->
+    <div th:if="${param.error}" style=" color: red;">
+      Invalid email or password. Please try again.
+    </div>
+  </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

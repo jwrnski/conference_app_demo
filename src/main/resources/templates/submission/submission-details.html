@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{fragments/header :: header}"></div>
+<body class="flex flex-col min-h-screen">
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="flex-grow">
+  <div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4" th:text="${submission.conference.name}">Conference Name</h1>
+    <p>
+      Paper title: <span th:text="${submission.paperTitle}"></span>
+    </p>
+    <p>
+      Abstract: <span th:text="${submission.abstract}"></span>
+    </p>
+
+    <p>
+      Authors:
+    <ul>
+      <li th:each="author : ${submission.author}">
+        <span th:text="${author.title}"></span>
+        <span th:text="${author.name}"></span>
+        <span th:text="${author.surname}"></span>
+      </li>
+    </ul>
+
+
+    <p>
+      Category: <span th:text="${submission.category}"></span>
+    </p>
+    <p>
+      Status: <span th:text="${submission.status}"></span>
+    </p>
+    <p>
+      Comments: <span th:text="${submission.comments}"></span>
+    </p>
+    <a href="/submissions" class="text-blue-500 hover:underline mt-10">Back to all submissions</a>
+
+  </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

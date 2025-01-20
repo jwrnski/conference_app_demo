@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{fragments/header :: header}"></div>
+<body class="flex flex-col min-h-screen bg-gray-100">
+
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="flex-grow">
+  <div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center">Add new institution</h1>
+
+    <form th:action="@{/institutions}" method="post" class="bg-white p-6 rounded shadow-md">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Institution name</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="name" name="name" type="text" placeholder="Enter name of institution" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="country">Country</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="country" name="country" type="text" placeholder="Enter country of institution" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="city">City</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="city" name="city" type="text" placeholder="Enter city of institution" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="logo">Logo</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="logo" name="logo" type="file" placeholder="Add logo of the institution" >
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="url">Website</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+               id="url" name="url" type="url" placeholder="Add institution website" >
+      </div>
+
+      <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
+              type="submit">
+        Add institution
+      </button>
+    </form>
+  </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
