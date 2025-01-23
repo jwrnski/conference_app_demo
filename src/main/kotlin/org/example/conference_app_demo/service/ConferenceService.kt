@@ -1,6 +1,5 @@
 package org.example.conference_app_demo.service
 
-import org.example.conference_app_demo.dto.ConferenceDTO
 import org.example.conference_app_demo.model.Conference
 import org.example.conference_app_demo.repository.ConferenceRepository
 import org.springframework.stereotype.Service
@@ -29,11 +28,11 @@ class ConferenceService(private val conferenceRepository: ConferenceRepository,
 
         existingConference.name = updatedConference.name
         existingConference.city = updatedConference.city
-        existingConference.url = updatedConference.url
+        existingConference.country = updatedConference.country
         existingConference.description = updatedConference.description
         existingConference.startDate = updatedConference.startDate
         existingConference.endDate = updatedConference.endDate
-        existingConference.tags = updatedConference.tags
+        existingConference.category = updatedConference.category
         existingConference.schedules.clear()
         existingConference.schedules.addAll(updatedConference.schedules)
         existingConference.updatedAt = LocalDateTime.now()

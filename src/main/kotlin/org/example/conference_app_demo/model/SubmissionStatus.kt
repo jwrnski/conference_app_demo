@@ -9,5 +9,5 @@ enum class SubmissionStatus {
     },
     REJECTED{
         override fun toString() = "Rejected"
-    }
+    };
 }

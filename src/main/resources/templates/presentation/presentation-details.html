@@ -21,7 +21,7 @@
         </p>
         <p>Authors:</p>
         <ul>
-            <li th:each="user : ${presentation.users}"
+            <li th:each="user : ${presentation.authors}"
                 class="hover:text-yellow-600 transition-colors duration-200 hover:underline">
                 <a th:href="@{/user/{id}(id=${presentation.id})}"
                    hx-target="#main-content"

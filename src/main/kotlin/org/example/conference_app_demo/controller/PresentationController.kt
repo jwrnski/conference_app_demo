@@ -3,6 +3,7 @@ package org.example.conference_app_demo.controller
 import org.example.conference_app_demo.model.Presentation
 import org.example.conference_app_demo.service.ConferenceService
 import org.example.conference_app_demo.service.PresentationService
+import org.example.conference_app_demo.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/presentations")
 class PresentationController(
     private val presentationService: PresentationService,
-    private val conferenceService: ConferenceService
+    private val conferenceService: ConferenceService,
+    private val userService: UserService
 ) {
 
     @GetMapping
@@ -34,6 +36,8 @@ class PresentationController(
         model.addAttribute("conferenceId", conferenceId);
         val conferenceName = conferenceService.getNameById(conferenceId)
         model.addAttribute("conferenceName", conferenceName)
+        val authors = userService.findAll();
+        model.addAttribute("authors", authors)
         return "presentation/create-presentation"
     }
 
@@ -41,6 +45,8 @@ class PresentationController(
     fun getEditPresentationPage(@PathVariable id: Long, model: Model): String {
         val presentation = presentationService.findById(id)
         model.addAttribute("presentation", presentation)
+        val authors = userService.findAll();
+        model.addAttribute("authors", authors)
         return "presentation/edit-presentation"
     }
 

@@ -17,13 +17,17 @@ class User(
     var email: String,
     var password: String,
     var phone: String,
+    var role: Role,
+
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "institution_id", nullable = false)
     var institution: Institution,
-    var role: Role,
 
-    @ManyToMany(mappedBy = "users")
-    var presentations: MutableList<Presentation> = mutableListOf(),
+    @ManyToMany(mappedBy = "author")
+    var submissions: MutableList<Submission> = mutableListOf(),
+
+    @ManyToMany(mappedBy = "attendees")
+    var attending: MutableList<Conference> = mutableListOf(),
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")

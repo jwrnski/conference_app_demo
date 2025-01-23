@@ -17,7 +17,10 @@ class Submission(
     @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinColumn(name = "conference_id", nullable = false)
     var conference: Conference? = null,
-    var category: String,
+
+    @ManyToMany
+    var topics: MutableList<Topic> = mutableListOf(),
+
     var status: SubmissionStatus = SubmissionStatus.PENDING,
     var comments: String? = null,
 

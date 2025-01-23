@@ -1,12 +1,9 @@
 package org.example.conference_app_demo.service
 
-import org.example.conference_app_demo.dto.ScheduleDTO
-import org.example.conference_app_demo.model.Conference
 import org.example.conference_app_demo.model.Schedule
 import org.example.conference_app_demo.repository.ScheduleRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Service
 class ScheduleService(  private val presentationService: PresentationService,

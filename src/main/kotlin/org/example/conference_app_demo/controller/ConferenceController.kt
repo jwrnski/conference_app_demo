@@ -1,6 +1,8 @@
 package org.example.conference_app_demo.controller
 
 import org.example.conference_app_demo.model.Conference
+import org.example.conference_app_demo.model.ConferenceCategory
+import org.example.conference_app_demo.model.Country
 import org.example.conference_app_demo.service.ConferenceService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -18,7 +20,9 @@ class ConferenceController(private val conferenceService: ConferenceService) {
     }
 
     @GetMapping("/create-conference")
-    fun createConferencePage(): String {
+    fun createConferencePage(model: Model): String {
+        model.addAttribute("categories", ConferenceCategory.entries.toTypedArray())
+        model.addAttribute("countries", Country.entries.toTypedArray())
         return "conference/create-conference"
     }
 

@@ -6,5 +6,5 @@ enum class Role {
     Organizer,
     Attendee,
     Reviewer,
-    Speaker
+    Speaker;
 }

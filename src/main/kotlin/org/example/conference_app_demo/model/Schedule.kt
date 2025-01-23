@@ -2,6 +2,7 @@ package org.example.conference_app_demo.model
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
@@ -15,12 +16,11 @@ class Schedule(
     @JoinColumn(name = "conference_id", nullable = false)
     var conference: Conference,
 
-    var startDate: LocalDateTime,
-    var endDate: LocalDateTime,
+    var startDate: LocalDate,
+    var endDate: LocalDate,
 
     @OneToMany(mappedBy = "schedule", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var presentations: MutableList<Presentation> = mutableListOf(),
-
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")

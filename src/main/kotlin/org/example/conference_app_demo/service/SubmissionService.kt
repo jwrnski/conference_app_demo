@@ -32,7 +32,7 @@ class SubmissionService(private val submissionRepository: SubmissionRepository) 
         existingSubmission.abstract = submission.abstract
         existingSubmission.author = submission.author
         existingSubmission.conference = submission.conference
-        existingSubmission.category = submission.category
+        existingSubmission.topics = submission.topics
         existingSubmission.status = submission.status
         existingSubmission.comments = submission.comments
         existingSubmission.updatedAt = LocalDateTime.now()

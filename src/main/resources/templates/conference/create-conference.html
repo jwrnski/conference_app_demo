@@ -8,7 +8,7 @@
     <div class="container mx-auto p-6">
         <h1 class="text-2xl font-bold mb-4">Create a conference</h1>
         <form th:action="@{/conferences}" method="post" class="bg-white p-6 rounded shadow-sm">
-            <!-- Name Field -->
+
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
                     Name
@@ -20,6 +20,16 @@
                         type="text"
                         placeholder="Conference Name"
                         required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="country">Category</label>
+                <select id="country" name="country" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
+                    <option disabled>-- Select Country --</option>
+                    <option th:each="country : ${countries}"
+                            th:value="${country.name()}"
+                            th:text="${country}"></option>
+                </select>
             </div>
 
             <!-- City Field -->
@@ -37,20 +47,6 @@
             </div>
 
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="url">
-                    url
-                </label>
-                <input
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="url"
-                        name="url"
-                        type="text"
-                        placeholder="City"
-                        required>
-            </div>
-
-            <!-- Description Field -->
-            <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
                     Description
                 </label>
@@ -63,7 +59,6 @@
                         required></textarea>
             </div>
 
-            <!-- Start Date Field -->
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">
                     Start Date
@@ -76,7 +71,6 @@
                         required>
             </div>
 
-            <!-- End Date Field -->
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="endDate">
                     End Date
@@ -89,28 +83,15 @@
                         required>
             </div>
 
-            <!-- Keywords Dropdown -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="tags">
-                    Select Keyword
-                </label>
-                <select
-                        id="tags"
-                        name="tags"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required>
-                    <option value="" disabled selected>Select a keyword...</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Science">Science</option>
-                    <option value="Programming">Programming</option>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="category">Category</label>
+                <select id="category" name="category" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
+                    <option disabled>-- Select Category --</option>
+                    <option th:each="category : ${categories}"
+                            th:value="${category.name()}"
+                            th:text="${category}"></option>
                 </select>
             </div>
-
-            // add presentations?
-
-
 
             <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
                     type="submit"

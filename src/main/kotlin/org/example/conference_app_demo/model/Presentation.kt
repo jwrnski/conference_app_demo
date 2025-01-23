@@ -19,11 +19,14 @@ class Presentation(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "conference_id")
-    var conference: Conference? = null,
+    var conference: Conference,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
-    var schedule: Schedule? = null,
+    var schedule: Schedule,
+
+    @OneToOne(fetch = FetchType.LAZY)
+    var submission: Submission,
 
     @ManyToMany
     @JoinTable(
@@ -31,7 +34,7 @@ class Presentation(
         joinColumns = [JoinColumn(name = "presentation_id")],
         inverseJoinColumns = [JoinColumn(name = "user_id")]
     )
-    var users: MutableList<User> = mutableListOf(),
+    var authors: MutableList<User> = mutableListOf(),
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")

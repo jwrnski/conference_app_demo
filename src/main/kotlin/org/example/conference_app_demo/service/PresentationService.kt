@@ -1,10 +1,7 @@
 package org.example.conference_app_demo.service
 
 import org.springframework.stereotype.Service
-import org.example.conference_app_demo.dto.PresentationDTO
 import org.example.conference_app_demo.model.Presentation
-import org.example.conference_app_demo.dto.ScheduleDTO
-import org.example.conference_app_demo.model.Schedule
 import org.example.conference_app_demo.repository.PresentationRepository
 import java.time.LocalDateTime
 
@@ -35,7 +32,7 @@ class PresentationService(private val userService: UserService, private val pres
         existingPresentation.endTime = presentation.endTime
         existingPresentation.updatedAt = LocalDateTime.now()
         existingPresentation.schedule = presentation.schedule
-        existingPresentation.users = presentation.users
+        existingPresentation.authors = presentation.authors
         return presentationRepository.save(existingPresentation)
     }
 
