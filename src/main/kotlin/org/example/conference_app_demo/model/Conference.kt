@@ -20,8 +20,11 @@ class Conference(
     var endDate:     LocalDateTime,
     var tags:        String,
 
+    //@OneToMany(mappedBy = "conference", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
+    //var submissions: MutableList<Submission> = mutableListOf(),
+
     @OneToMany(mappedBy = "conference", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
-    var submissions: MutableList<Submission> = mutableListOf(),
+    var topics: MutableList<Topic> = mutableListOf(),
 
     @OneToMany(mappedBy = "conference", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
     var schedules: MutableList<Schedule> = mutableListOf(),

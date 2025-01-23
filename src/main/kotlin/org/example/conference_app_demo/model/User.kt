@@ -22,7 +22,7 @@ class User(
     var institution: Institution,
     var role: Role,
 
-    @ManyToMany(mappedBy = "users") // Reference back to presentations
+    @ManyToMany(mappedBy = "users")
     var presentations: MutableList<Presentation> = mutableListOf(),
 
     @Column(nullable = false, updatable = false)

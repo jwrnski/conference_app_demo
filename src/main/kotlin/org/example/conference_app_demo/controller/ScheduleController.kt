@@ -1,13 +1,21 @@
 package org.example.conference_app_demo.controller
 
 import org.example.conference_app_demo.model.Schedule
+import org.example.conference_app_demo.repository.PresentationRepository
+import org.example.conference_app_demo.service.ConferenceService
 import org.example.conference_app_demo.service.ScheduleService
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-@RestController
-@RequestMapping("/schedule")
-class ScheduleController(private val scheduleService: ScheduleService) {
+@Controller
+@RequestMapping("/schedules")
+class ScheduleController(
+    private val scheduleService: ScheduleService,
+    private val conferenceService: ConferenceService,
+    private val presentationRepository: PresentationRepository
+) {
 
     @GetMapping
     fun getAllSchedules(): ResponseEntity<List<Schedule>> {
@@ -19,6 +27,15 @@ class ScheduleController(private val scheduleService: ScheduleService) {
     fun getScheduleById(@PathVariable id: Long): ResponseEntity<Schedule> {
         val schedule = scheduleService.findById(id);
         return ResponseEntity.ok(schedule);
+    }
+
+    @GetMapping("/create-schedule")
+    fun createSchedulePage(@RequestParam conferenceId: Long, model: Model): String {
+        val conference = conferenceService.findById(conferenceId);
+        model.addAttribute("conference", conference);
+        val presentations = presentationRepository.findByConferenceId(conferenceId)
+        model.addAttribute("presentations", presentations);
+        return "schedule/create-schedule"
     }
 
     @PostMapping

@@ -29,11 +29,9 @@ class AuthController(private val userService: UserService,
         @RequestParam institutionId: Long,
         @RequestParam role: Role
     ): String {
-        // Find the selected institution
         val institution = institutionService.findById(institutionId)
         val hashedPassword = passwordEncoder.encode(password)
         println("Fetched institution: $institution")
-        // Create and save the new user
         val user = User(
             name = name,
             surname = surname,
@@ -45,8 +43,7 @@ class AuthController(private val userService: UserService,
             role = role
         )
         userService.save(user)
-        println("\nCALLED registerUser $name, $surname, $title, $email, $password, $phone, $institutionId, $role\n")
-        // Redirect to a confirmation page or login after successful registration
+        //println("\nCALLED registerUser $name, $surname, $title, $email, $password, $phone, $institutionId, $role\n")
         return "redirect:/auth/login"
     }
 

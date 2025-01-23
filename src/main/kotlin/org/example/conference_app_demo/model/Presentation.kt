@@ -17,7 +17,7 @@ class Presentation(
     var startTime: LocalTime,
     var endTime: LocalTime,
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "conference_id")
     var conference: Conference? = null,
 

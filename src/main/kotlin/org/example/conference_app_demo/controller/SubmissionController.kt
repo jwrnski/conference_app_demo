@@ -43,8 +43,8 @@ class SubmissionController(
         val authenticatedUser = SecurityContextHolder.getContext().authentication
         val principal = authenticatedUser.principal
         if (principal is org.example.conference_app_demo.auth.CustomUserDetails) {
-            val userId = principal.getId() // Get the user's ID
-            model.addAttribute("userId", userId) // Add user ID to the model
+            val userId = principal.getId()
+            model.addAttribute("userId", userId)
         }
         val comments = "This submission is under review."
         model.addAttribute("comments", comments)

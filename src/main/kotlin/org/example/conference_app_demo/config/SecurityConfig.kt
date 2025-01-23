@@ -3,6 +3,7 @@ package org.example.conference_app_demo.config
 import org.example.conference_app_demo.service.CustomUserDetailsService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -26,7 +27,14 @@ class SecurityConfig(private val customUserDetailsService: CustomUserDetailsServ
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests { it
-                .requestMatchers("/", "/auth/register", "auth/login", "/css/**", "/js/**", "/images/**", "/conferences", "/presentations", "/institutions/**").permitAll() // Public pages (registration, login, static files)
+                .requestMatchers(
+                    HttpMethod.DELETE, "/conferences/*", "/institutions/*", "/presentations/*").hasRole("ADMIN")
+                .requestMatchers("/", "/auth/register",
+                    "auth/login",
+                    "/css/**", "/js/**", "/images/**",
+                    "/conferences","/conferences/*",
+                    "/presentations", "/presentations/*",
+                    "/institutions", "/institutions/*").permitAll() // Public pages (registration, login, static files)
                 .requestMatchers("/**").hasRole("ADMIN") // Admin-only access
                 .anyRequest().authenticated() // Require authentication for everything else
             }
@@ -49,8 +57,8 @@ class SecurityConfig(private val customUserDetailsService: CustomUserDetailsServ
     fun authenticationManager(http: HttpSecurity): AuthenticationManager {
         val authManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder::class.java)
         authManagerBuilder
-            .userDetailsService(customUserDetailsService) // Set the custom user details service
-            .passwordEncoder(passwordEncoder()) // Add the password encoder
+            .userDetailsService(customUserDetailsService)
+            .passwordEncoder(passwordEncoder())
         return authManagerBuilder.build()
     }*/
 
