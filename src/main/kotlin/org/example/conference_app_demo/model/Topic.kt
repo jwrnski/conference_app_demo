@@ -14,12 +14,18 @@ class Topic(
 
     var name: String,
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "conference_id", nullable = false)
-    var conference: Conference,
+    @Enumerated(EnumType.STRING)
+    var conferenceCategory: ConferenceCategory,
 
-    @ManyToMany(mappedBy = "topics", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var submissions: MutableList<Submission> = mutableListOf(),
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "conference_id")
+    //var conference: Conference? = null,
+
+    //@ManyToMany(mappedBy = "topics", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    //var presentations: MutableList<Presentation> = mutableListOf(),
+//
+    //@ManyToMany(mappedBy = "topics", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    //var submissions: MutableList<Submission> = mutableListOf(),
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")

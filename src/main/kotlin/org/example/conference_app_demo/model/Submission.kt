@@ -12,13 +12,20 @@ class Submission(
     var paperTitle: String,
     var abstract: String,
     var filePath: String,
+
     @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var author: MutableList<User> = mutableListOf(),
+    var authors: MutableList<User> = mutableListOf(),
+
     @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinColumn(name = "conference_id", nullable = false)
     var conference: Conference? = null,
 
     @ManyToMany
+    @JoinTable(
+        name = "submission_topics",
+        joinColumns = [JoinColumn(name = "submission_id")],
+        inverseJoinColumns = [JoinColumn(name = "topic_id")]
+    )
     var topics: MutableList<Topic> = mutableListOf(),
 
     var status: SubmissionStatus = SubmissionStatus.PENDING,

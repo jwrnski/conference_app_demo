@@ -1,6 +1,7 @@
 package org.example.conference_app_demo.service
 
 import org.example.conference_app_demo.model.Submission
+import org.example.conference_app_demo.model.SubmissionStatus
 import org.example.conference_app_demo.repository.SubmissionRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -26,11 +27,30 @@ class SubmissionService(private val submissionRepository: SubmissionRepository) 
         submissionRepository.deleteById(id)
     }
 
+    fun updateStatus(id: Long, status: SubmissionStatus){
+        val submission = submissionRepository.findById(id)
+            .orElseThrow { RuntimeException("Submission not found with id $id") }
+
+        submission.status = status
+        if(status == SubmissionStatus.APPROVED)
+            submission.comments = "This submission has been approved"
+        else if(status == SubmissionStatus.REJECTED)
+            submission.comments = "This submission has been rejected"
+        submissionRepository.save(submission)
+
+    }
+
+    fun getApprovedSubmissions(): List<Submission> {
+        val submissions = submissionRepository.findAll()
+        val approvedSubmissions = submissions.filter { it.status == SubmissionStatus.APPROVED }
+        return approvedSubmissions
+    }
+
     fun update(id: Long, submission: Submission): Submission {
         val existingSubmission = findById(id) ?: throw Exception("Submission with id $id not found")
         existingSubmission.paperTitle = submission.paperTitle
         existingSubmission.abstract = submission.abstract
-        existingSubmission.author = submission.author
+        existingSubmission.authors = submission.authors
         existingSubmission.conference = submission.conference
         existingSubmission.topics = submission.topics
         existingSubmission.status = submission.status

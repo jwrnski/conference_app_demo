@@ -37,6 +37,16 @@
             </div>
 
             <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="submission">Submission</label>
+                <select id="submission" name="submission" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
+                    <option disabled>-- Select Submission --</option>
+                    <option th:each="submission : ${submissions}"
+                            th:value="${submission}"
+                            th:text="${submission.paperTitle}"></option>
+                </select>
+            </div>
+
+            <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="author">Authors</label>
                 <select id="author" name="author" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
                     <option disabled>-- Select Authors --</option>

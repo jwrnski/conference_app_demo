@@ -54,6 +54,35 @@
                style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
                 Create Schedule
             </a>
+
+            <form th:action="@{/registrations}" method="post" th:if="${!isRegistered}">
+                <input type="hidden" name="conferenceId" th:value="${conference.id}" />
+                <input type="hidden" name="userId" th:value="${userId}" />
+                <button type="submit"
+                        style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
+                    Register
+                </button>
+            </form>
+
+            <form th:action="@{/registrations}" method="post" th:if="${isRegistered}">
+                <input type="hidden" name="_method" value="put"/>
+                <input type="hidden" name="conferenceId" th:value="${conference.id}" />
+                <input type="hidden" name="userId" th:value="${userId}" />
+                <button type="submit"
+                        style="background-color: red; color: white; padding: 7px; border-radius: 5px;">
+                    Unregister
+                </button>
+            </form>
+
+            <!--<form th:action="@{/registrations}" method="post">
+                <input type="hidden" name="conferenceId" th:value="${conference.id}" />
+                <input type="hidden" name="userId" th:value="${#authentication.principal.id}" />
+                <button type="submit"
+                        style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
+                    Register
+                </button>
+
+            </form>-->
         </div>
 
     </div>

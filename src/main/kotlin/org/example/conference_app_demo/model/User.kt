@@ -1,5 +1,4 @@
 package org.example.conference_app_demo.model
-
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -23,11 +22,14 @@ class User(
     @JoinColumn(name = "institution_id", nullable = false)
     var institution: Institution,
 
-    @ManyToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
+    var registrations: MutableList<Registration> = mutableListOf(),
+
+    @ManyToMany(mappedBy = "authors")
     var submissions: MutableList<Submission> = mutableListOf(),
 
-    @ManyToMany(mappedBy = "attendees")
-    var attending: MutableList<Conference> = mutableListOf(),
+    //@ManyToMany(mappedBy = "attendees")
+    //var attending: MutableList<Conference> = mutableListOf(),
 
     @Column(nullable = false, updatable = false)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")

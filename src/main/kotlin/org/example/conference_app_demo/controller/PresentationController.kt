@@ -3,6 +3,7 @@ package org.example.conference_app_demo.controller
 import org.example.conference_app_demo.model.Presentation
 import org.example.conference_app_demo.service.ConferenceService
 import org.example.conference_app_demo.service.PresentationService
+import org.example.conference_app_demo.service.SubmissionService
 import org.example.conference_app_demo.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.*
 class PresentationController(
     private val presentationService: PresentationService,
     private val conferenceService: ConferenceService,
-    private val userService: UserService
+    private val userService: UserService,
+    private val submissionService: SubmissionService
 ) {
 
     @GetMapping
@@ -38,6 +40,8 @@ class PresentationController(
         model.addAttribute("conferenceName", conferenceName)
         val authors = userService.findAll();
         model.addAttribute("authors", authors)
+        val submissions = submissionService.getApprovedSubmissions()
+        model.addAttribute("submissions", submissions)
         return "presentation/create-presentation"
     }
 

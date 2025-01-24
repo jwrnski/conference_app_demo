@@ -3,15 +3,21 @@ package org.example.conference_app_demo.controller
 import org.example.conference_app_demo.model.Conference
 import org.example.conference_app_demo.model.ConferenceCategory
 import org.example.conference_app_demo.model.Country
+import org.example.conference_app_demo.repository.RegistrationRepository
 import org.example.conference_app_demo.service.ConferenceService
-import org.springframework.http.ResponseEntity
+import org.example.conference_app_demo.service.RegistrationService
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
 @RequestMapping("/conferences")
-class ConferenceController(private val conferenceService: ConferenceService) {
+class ConferenceController(
+    private val conferenceService: ConferenceService,
+    private val registrationService: RegistrationService,
+    private val registrationRepository: RegistrationRepository
+) {
 
     @PostMapping
     fun createConference(@ModelAttribute conference: Conference): String {
@@ -36,6 +42,14 @@ class ConferenceController(private val conferenceService: ConferenceService) {
     fun getConferenceDetails(@PathVariable id: Long, model: Model): String {
         val conference = conferenceService.findById(id)
         model.addAttribute("conference", conference)
+        val authenticatedUser = SecurityContextHolder.getContext().authentication
+        val principal = authenticatedUser.principal
+        if (principal is org.example.conference_app_demo.auth.CustomUserDetails) {
+            val userId = principal.getId()
+            model.addAttribute("userId", userId)
+            val isRegistered = registrationService.isUserRegistered(conference.id, userId)
+            model.addAttribute("isRegistered", isRegistered)
+        }
         return "conference/conference-details"
     }
 

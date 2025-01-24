@@ -27,6 +27,10 @@ class UserService(private val userRepository: UserRepository) {
         return userRepository.findByEmail(email)
     }
 
+    fun getRegistrationId(){
+
+    }
+
     fun deleteById(id: Long) {
         if(userRepository.findById(id).isEmpty) throw Exception()
         userRepository.deleteById(id)

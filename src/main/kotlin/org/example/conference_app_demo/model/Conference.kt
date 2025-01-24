@@ -18,16 +18,15 @@ class Conference(
     var startDate:   LocalDateTime,
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     var endDate:     LocalDateTime,
+
+    @Enumerated(EnumType.STRING)
     var category:    ConferenceCategory,
 
-    //@OneToMany(mappedBy = "conference", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
-    //var submissions: MutableList<Submission> = mutableListOf(),
-
-    @ManyToMany
-    var attendees: MutableList<User> = mutableListOf(),
-
     @OneToMany(mappedBy = "conference", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
-    var topics: MutableList<Topic> = mutableListOf(),
+    var registrations: MutableList<Registration> = mutableListOf(),
+
+    //@OneToMany(mappedBy = "conference", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
+    //var topics: MutableList<Topic> = mutableListOf(),
 
     @OneToMany(mappedBy = "conference", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
     var schedules: MutableList<Schedule> = mutableListOf(),

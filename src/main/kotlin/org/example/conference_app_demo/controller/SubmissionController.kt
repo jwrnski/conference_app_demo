@@ -1,12 +1,14 @@
 package org.example.conference_app_demo.controller
 
 import org.example.conference_app_demo.model.Submission
+import org.example.conference_app_demo.model.SubmissionStatus
+import org.example.conference_app_demo.model.Topic
 import org.example.conference_app_demo.model.User
+import org.example.conference_app_demo.repository.TopicRepository
 import org.example.conference_app_demo.service.ConferenceService
 import org.example.conference_app_demo.service.SubmissionService
 import org.example.conference_app_demo.service.UserService
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -17,7 +19,8 @@ import org.springframework.web.bind.annotation.*
 class SubmissionController(
     private val submissionService: SubmissionService,
     private val conferenceService: ConferenceService,
-    private val userService: UserService
+    private val userService: UserService,
+    private val topicRepository: TopicRepository
 ) {
 
     @GetMapping
@@ -48,6 +51,8 @@ class SubmissionController(
         }
         val comments = "This submission is under review."
         model.addAttribute("comments", comments)
+        val topics = topicRepository.findByConferenceCategory(conference.category)
+        model.addAttribute("topics", topics)
         return "submission/submission-form"
     }
 
@@ -55,12 +60,15 @@ class SubmissionController(
     fun createSubmission(@ModelAttribute submission: Submission,
                          @RequestParam conferenceId: Long,
                          @RequestParam("userId") user: User,
-                         @RequestParam("comments") comments: String): String{
+                         @RequestParam("comments") comments: String,
+                         @RequestParam("topics") selectedTopics: List<Long>): String{
         val conference = conferenceService.findById(conferenceId)
         submission.conference = conference
         val author = userService.findById(user.id)
-        submission.author.add(author)
+        submission.authors.add(author)
         submission.comments = comments
+        val topics = topicRepository.findAllById(selectedTopics)
+        submission.topics = topics.toMutableList()
         submissionService.save(submission)
         return "redirect:/conferences/$conferenceId"
     }
@@ -71,9 +79,12 @@ class SubmissionController(
         return ResponseEntity.noContent().build()
     }
 
-    @PutMapping("/{id}")
-    fun updateSubmission(@PathVariable id: Long, @RequestBody submission: Submission): ResponseEntity<Submission> {
-        val updatedSubmission = submissionService.update(id, submission);
-        return ResponseEntity.ok(updatedSubmission);
+
+    @PutMapping()
+    fun updateStatus(@RequestParam submissionId: Long,
+                     @RequestParam status: SubmissionStatus): String {
+        submissionService.updateStatus(submissionId, status)
+        return "redirect:/submissions/$submissionId"
     }
+
 }

@@ -8,5 +8,5 @@ import java.util.*
 
 @Repository
 interface InstitutionRepository : JpaRepository<Institution, Long> {
-
+    fun existsByName(name: String): Boolean
 }
