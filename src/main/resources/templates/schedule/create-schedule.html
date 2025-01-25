@@ -8,45 +8,32 @@
     <div class="container mx-auto p-6">
         <h1 class="text-2xl font-bold mb-4">Create schedule for</h1>
         <h1 class="text-2xl font-bold mb-4"> <span th:text="${conference.name}"></span></h1>
-        <form th:action="@{/schedules}" method="post" class="bg-white p-6 rounded shadow-sm">
-            <input type="hidden" name="conferenceId" th:value="${conference.id}"/>
+        <table class="table-auto border-collapse border border-gray-300 w-full">
+            <!-- Table Header - Days -->
+            <thead>
+            <tr>
+                <th class="border border-gray-300 px-4 py-2 bg-gray-200 text-left">Time</th>
+                <th th:each="day : ${days}" class="border border-gray-300 px-4 py-2 bg-gray-200 text-center">
+                    <span th:text="${day}"></span>
+                </th>
+            </tr>
+            </thead>
 
-            <div class="mb-4">
-                <label for="startDate" class="block text-gray-700 font-bold mb-2">Select Date:</label>
-                <input
-                        type="date"
-                        id="startDate"
-                        name="startDate"
-                        th:attr="min=${conference.startDate}, max=${conference.endDate}"
-                        class="border-gray-300 rounded w-full"
-                        required />
-                <p class="text-sm text-gray-500 mt-1">Select a date between the conference dates:
-                    <span th:text="'Start: ' + ${conference.startDate} + ' | End: ' + ${conference.endDate}"></span>
-                </p>
-            </div>
+            <!-- Table Rows - Hours -->
+            <tbody>
+            <tr th:each="hour : ${hours}">
+                <td class="border border-gray-300 px-4 py-2 text-center" th:text="'Hour: ' + ${hour} + ':00'"></td>
 
-            <div class="mb-4">
-                <label for="presentationId" class="block text-gray-700 font-bold mb-2">Select Presentation:</label>
-                <select
-                        id="presentationId"
-                        name="presentationId"
-                        class="border-gray-300 rounded w-full"
-                        required>
-                    <option value="" disabled selected>Select a presentation</option>
+                <!-- Columns: Days for Presentations -->
+                <td th:each="day : ${days}"
+                    class="border border-gray-300 px-4 py-2 text-center hover:bg-gray-100 cursor-pointer"
+                    th:href="@{/presentations/create-presentation(conferenceId=${conference.id})}">
+                    + Add Presentation
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-                    <option th:each="presentation : ${presentations}"
-                            th:value="${presentation.id}"
-                            th:text="${presentation.title}">
-                    </option>
-                </select>
-            </div>
-
-            <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
-                    type="submit">
-                Create Schedule
-            </button>
-
-        </form>
     </div>
 </main>
 

@@ -38,7 +38,7 @@ class SubmissionController(
     }
 
     @GetMapping("/submission-form")
-    fun getSubmissionFormPage(@RequestParam conferenceId: Long, model: Model): String{
+    fun getSubmissionFormPage(@RequestParam("conferenceId") conferenceId: Long, model: Model): String{
         val conference = conferenceService.findById(conferenceId)
         model.addAttribute("conferenceId", conference.id)
         val conferenceName = conferenceService.getNameById(conferenceId)
@@ -58,7 +58,7 @@ class SubmissionController(
 
     @PostMapping
     fun createSubmission(@ModelAttribute submission: Submission,
-                         @RequestParam conferenceId: Long,
+                         @RequestParam("conferenceId") conferenceId: Long,
                          @RequestParam("userId") user: User,
                          @RequestParam("comments") comments: String,
                          @RequestParam("topics") selectedTopics: List<Long>): String{

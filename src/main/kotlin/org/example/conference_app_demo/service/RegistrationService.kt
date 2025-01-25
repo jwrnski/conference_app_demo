@@ -26,9 +26,17 @@ class RegistrationService(
             .orElseThrow { IllegalArgumentException("User not found") }
 
         val existingRegistration = registrationRepository.findByConferenceAndUser(conference, user)
-        if (existingRegistration != null && existingRegistration.active) {
-            throw IllegalArgumentException("User is already registered for this conference")
+        if (existingRegistration != null) {
+            if (existingRegistration.active) {
+                throw IllegalArgumentException("User is already registered for this conference")
+            } else {
+                existingRegistration.active = true
+                existingRegistration.updatedAt = LocalDateTime.now()
+                registrationRepository.save(existingRegistration)
+                return
+            }
         }
+
 
         val registration = Registration(
             createdAt = LocalDateTime.now(),
@@ -47,6 +55,7 @@ class RegistrationService(
             .orElseThrow { IllegalArgumentException("User not found") }
         val registration = registrationRepository.findByConferenceAndUser(conference, user)
             ?: throw IllegalArgumentException("Registration not found")
+
         registration.active = false
         registrationRepository.save(registration)
     }
@@ -56,7 +65,12 @@ class RegistrationService(
             .orElseThrow { IllegalArgumentException("Conference not found") }
         val user: User = userRepository.findById(userId)
             .orElseThrow { IllegalArgumentException("User not found") }
-        return registrationRepository.findByConferenceAndUser(conference, user) != null
+        val registration = registrationRepository.findByConferenceAndUser(conference, user)
+        println("\nregistration $registration\n")
+        if (registration != null) {
+            return registration.active
+        }
+        return false
     }
 
 }

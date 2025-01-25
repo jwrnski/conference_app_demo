@@ -3,6 +3,7 @@ package org.example.conference_app_demo.controller
 import org.example.conference_app_demo.model.Schedule
 import org.example.conference_app_demo.repository.PresentationRepository
 import org.example.conference_app_demo.service.ConferenceService
+import org.example.conference_app_demo.service.PresentationService
 import org.example.conference_app_demo.service.ScheduleService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.*
 class ScheduleController(
     private val scheduleService: ScheduleService,
     private val conferenceService: ConferenceService,
-    private val presentationRepository: PresentationRepository
+    private val presentationRepository: PresentationRepository,
+    private val presentationService: PresentationService
 ) {
 
     @GetMapping
@@ -29,12 +31,22 @@ class ScheduleController(
         return ResponseEntity.ok(schedule);
     }
 
-    @GetMapping("/create-schedule")
+    @GetMapping("/create")
     fun createSchedulePage(@RequestParam conferenceId: Long, model: Model): String {
+
         val conference = conferenceService.findById(conferenceId);
         model.addAttribute("conference", conference);
+
         val presentations = presentationRepository.findByConferenceId(conferenceId)
         model.addAttribute("presentations", presentations);
+
+        val startDateTime = conference.startDate
+        val endDateTime = conference.endDate
+
+        model.addAttribute("conference", conference)
+
+        model.addAttribute("presentations", presentationRepository.getAllByConferenceId(conference.id))
+
         return "schedule/create-schedule"
     }
 

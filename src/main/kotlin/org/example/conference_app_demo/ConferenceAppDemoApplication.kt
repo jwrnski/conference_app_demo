@@ -3,8 +3,10 @@ package org.example.conference_app_demo
 import org.example.conference_app_demo.model.ConferenceCategory
 import org.example.conference_app_demo.model.Institution
 import org.example.conference_app_demo.model.Topic
+import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.repository.InstitutionRepository
 import org.example.conference_app_demo.repository.TopicRepository
+import org.example.conference_app_demo.repository.UserRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
@@ -19,7 +21,8 @@ fun main(args: Array<String>) {
 }
 @Component
 class DatabaseInitializer(private val topicRepository: TopicRepository,
-                            private val institutionRepository: InstitutionRepository) : CommandLineRunner {
+                          private val institutionRepository: InstitutionRepository,
+                          private val userRepository: UserRepository) : CommandLineRunner {
     override fun run(vararg args: String?) {
         val topics = listOf(
             // Computer Science Topics
@@ -62,6 +65,7 @@ class DatabaseInitializer(private val topicRepository: TopicRepository,
         if (!institutionRepository.existsByName(institution.name)) {
             institutionRepository.save(institution)
         }
+
 
     }
 }

@@ -21,13 +21,15 @@
         </p>
         <p>Authors:</p>
         <ul>
-            <li th:each="user : ${presentation.authors}"
+            <li th:each="author : ${presentation.speakers}"
                 class="hover:text-yellow-600 transition-colors duration-200 hover:underline">
                 <a th:href="@{/user/{id}(id=${presentation.id})}"
                    hx-target="#main-content"
                    hx-swap="innerHTML"
                 >
-                    <span th:text="${user.name}">Author</span>
+                    <span th:text="${author.title}"></span>
+                    <span th:text="${author.name}"></span>
+                    <span th:text="${author.surname}"></span>
                 </a>
             </li>
         </ul>

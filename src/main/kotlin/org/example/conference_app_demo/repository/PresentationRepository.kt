@@ -13,4 +13,6 @@ interface PresentationRepository : JpaRepository<Presentation, Long> {
     @Query("SELECT p FROM Presentation p WHERE p.conference.id = :conferenceId")
     fun findByConferenceId(@Param("conferenceId") conferenceId: Long): List<Presentation>
 
+    fun getAllByConferenceId(conferenceId: Long): List<Presentation>
+
 }

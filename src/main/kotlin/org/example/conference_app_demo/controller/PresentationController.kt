@@ -29,6 +29,7 @@ class PresentationController(
     @GetMapping("/{id}")
     fun getPresentationById(@PathVariable id: Long, model: Model): String {
         val presentation = presentationService.findById(id);
+        val authors = presentation.speakers.size
         model.addAttribute("presentation", presentation);
         return "presentation/presentation-details";
     }
@@ -55,9 +56,18 @@ class PresentationController(
     }
 
     @PostMapping
-    fun createPresentation(@ModelAttribute presentation: Presentation, @RequestParam("conferenceId") conferenceId: Long): String {
+    fun createPresentation(@ModelAttribute presentation: Presentation,
+                           @RequestParam("conferenceId") conferenceId: Long,
+                           @RequestParam("submissionId") submissionId: Long,
+                           @RequestParam("authorId") authorId: Long): String {
         val conference = conferenceService.findById(conferenceId)
         presentation.conference = conference
+        val submission = submissionService.findById(submissionId)
+        if (submission != null) {
+            presentation.submission = submission
+        }
+        val author = userService.findById(authorId)
+        presentation.speakers.add(author)
         presentationService.save(presentation)
         return "redirect:/conferences/$conferenceId"
     }

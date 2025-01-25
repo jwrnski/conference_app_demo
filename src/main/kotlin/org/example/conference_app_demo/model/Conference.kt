@@ -1,6 +1,7 @@
 package org.example.conference_app_demo.model
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
@@ -14,10 +15,10 @@ class Conference(
     var city:        String,
     var country:     Country,
     var description: String,
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
-    var startDate:   LocalDateTime,
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
-    var endDate:     LocalDateTime,
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    var startDate: LocalDate,
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    var endDate:     LocalDate,
 
     @Enumerated(EnumType.STRING)
     var category:    ConferenceCategory,

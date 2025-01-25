@@ -32,7 +32,7 @@ class PresentationService(private val userService: UserService, private val pres
         existingPresentation.endTime = presentation.endTime
         existingPresentation.updatedAt = LocalDateTime.now()
         existingPresentation.schedule = presentation.schedule
-        existingPresentation.authors = presentation.authors
+        existingPresentation.speakers = presentation.speakers
         return presentationRepository.save(existingPresentation)
     }
 
