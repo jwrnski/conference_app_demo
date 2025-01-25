@@ -11,10 +11,10 @@
             Description: <span th:text="${conference.description}"></span>
         </p>
         <p>
-            Start Date: <span th:text="${conference.startDate}"></span>
+            Start Date: <span th:text="${conference.startDate} + '(' + ${conference.startDate.dayOfWeek} + ')'"></span>
         </p>
         <p>
-            End Date: <span th:text="${conference.endDate}"></span>
+            End Date: <span th:text="${conference.endDate} + '(' + ${conference.endDate.dayOfWeek} + ')'"></span>
         </p>
         <p>
             City: <span th:text="${conference.city}"></span>

@@ -42,6 +42,10 @@ class ConferenceController(
     fun getConferenceDetails(@PathVariable id: Long, model: Model): String {
         val conference = conferenceService.findById(id)
         model.addAttribute("conference", conference)
+        val day = conference.startDate.dayOfMonth
+        val month = conference.startDate.monthValue
+        model.addAttribute("day", day)
+        model.addAttribute("month", month)
         val authenticatedUser = SecurityContextHolder.getContext().authentication
         val principal = authenticatedUser.principal
         if (principal is org.example.conference_app_demo.auth.CustomUserDetails) {
