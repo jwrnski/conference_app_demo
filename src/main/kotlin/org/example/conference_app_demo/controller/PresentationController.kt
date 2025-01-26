@@ -1,10 +1,7 @@
 package org.example.conference_app_demo.controller
 
 import org.example.conference_app_demo.model.Presentation
-import org.example.conference_app_demo.service.ConferenceService
-import org.example.conference_app_demo.service.PresentationService
-import org.example.conference_app_demo.service.SubmissionService
-import org.example.conference_app_demo.service.UserService
+import org.example.conference_app_demo.service.*
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -16,7 +13,8 @@ class PresentationController(
     private val presentationService: PresentationService,
     private val conferenceService: ConferenceService,
     private val userService: UserService,
-    private val submissionService: SubmissionService
+    private val submissionService: SubmissionService,
+    private val scheduleService: ScheduleService
 ) {
 
     @GetMapping
@@ -43,6 +41,8 @@ class PresentationController(
         model.addAttribute("authors", authors)
         val submissions = submissionService.getApprovedSubmissions()
         model.addAttribute("submissions", submissions)
+        val schedules = scheduleService.findByConferenceId(conferenceId)
+        model.addAttribute("schedules", schedules)
         return "presentation/create-presentation"
     }
 
@@ -59,15 +59,23 @@ class PresentationController(
     fun createPresentation(@ModelAttribute presentation: Presentation,
                            @RequestParam("conferenceId") conferenceId: Long,
                            @RequestParam("submissionId") submissionId: Long,
-                           @RequestParam("authorId") authorId: Long): String {
+                           @RequestParam("authorId") authorId: Long,
+                           @RequestParam("scheduleId") scheduleId: Long
+                            ): String {
         val conference = conferenceService.findById(conferenceId)
         presentation.conference = conference
+
         val submission = submissionService.findById(submissionId)
         if (submission != null) {
             presentation.submission = submission
         }
+
         val author = userService.findById(authorId)
         presentation.speakers.add(author)
+
+        val schedule = scheduleService.findById(scheduleId)
+        presentation.schedule = schedule
+
         presentationService.save(presentation)
         return "redirect:/conferences/$conferenceId"
     }

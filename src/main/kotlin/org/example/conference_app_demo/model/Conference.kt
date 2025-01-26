@@ -23,11 +23,13 @@ class Conference(
     @Enumerated(EnumType.STRING)
     var category:    ConferenceCategory,
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    var organizer: User? = null,
+
     @OneToMany(mappedBy = "conference", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
     var registrations: MutableList<Registration> = mutableListOf(),
 
-    //@OneToMany(mappedBy = "conference", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
-    //var topics: MutableList<Topic> = mutableListOf(),
 
     @OneToMany(mappedBy = "conference", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.LAZY)
     var schedules: MutableList<Schedule> = mutableListOf(),

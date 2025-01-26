@@ -22,9 +22,45 @@
         <p>
             Category: <span th:text="${conference.category}"></span>
         </p>
-        <a href="/conferences" class="text-blue-500 hover:underline mt-10">Back to all conferences</a>
 
-        // list of presentations
+        <table class="min-w-full divide-y divide-gray-300 bg-white border rounded-lg shadow-sm">
+            <thead class="bg-gray-200">
+            <tr>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 uppercase">Day</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 uppercase">Presentations</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+            <!-- Iterate through the conference schedules -->
+            <tr th:each="schedule : ${schedules}">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" th:text="${schedule.startDate}"></td>
+                <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">
+                    <ul class="space-y-2">
+                        <!-- Iterate through presentations for each schedule -->
+                        <li th:each="presentation : ${schedule.presentations}" class="p-3 bg-gray-50 rounded shadow">
+                            <div class="font-bold text-gray-800" th:text="${presentation.title}"></div>
+                            <div class="text-gray-600" th:text="${presentation.description}"></div>
+                            <div class="text-sm text-gray-500 italic" th:text="${presentation.startTime} + ' - ' + ${presentation.endTime}"></div>
+                            <div class="text-sm text-gray-700">
+                                Speakers:
+                                <span th:each="speaker, iterStat : ${presentation.speakers}">
+                                        <span th:text="${speaker.title} + ' ' + ${speaker.name} + ' ' + ${speaker.surname}"></span>
+                                        <span th:if="!${iterStat.last}">, </span>
+                                    </span>
+                            </div>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+
+
+
+
+        <a href="/conferences" class="text-blue-500 hover:underline mt-10">Back to all conferences</a>
 
         <div class="mt-10 flex space-x-4">
             <!-- Edit Button -->

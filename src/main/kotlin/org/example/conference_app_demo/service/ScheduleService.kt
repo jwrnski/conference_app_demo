@@ -18,6 +18,10 @@ class ScheduleService(  private val presentationService: PresentationService,
         return scheduleRepository.findById(id).orElseThrow{Exception("Schedule not found")}
     }
 
+    fun findByConferenceId(id: Long): MutableList<Schedule> {
+        return scheduleRepository.findScheduleByConferenceId(id)
+    }
+
     fun findAll(): List<Schedule> {
         return scheduleRepository.findAll()
     }
@@ -29,7 +33,6 @@ class ScheduleService(  private val presentationService: PresentationService,
     fun update(id: Long, schedule: Schedule): Schedule {
         val existingSchedule = findById(schedule.id)
         existingSchedule.startDate = schedule.startDate
-        existingSchedule.endDate = schedule.endDate
         existingSchedule.updatedAt = LocalDateTime.now()
         existingSchedule.presentations = schedule.presentations
         existingSchedule.conference = schedule.conference

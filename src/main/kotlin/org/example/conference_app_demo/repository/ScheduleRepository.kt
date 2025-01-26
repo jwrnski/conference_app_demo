@@ -8,4 +8,5 @@ import java.util.*
 @Repository
 interface ScheduleRepository : JpaRepository<Schedule, Long> {
 
+    fun findScheduleByConferenceId(conferenceId: Long): MutableList<Schedule>
 }

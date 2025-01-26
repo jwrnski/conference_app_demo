@@ -17,7 +17,6 @@ class Schedule(
     var conference: Conference,
 
     var startDate: LocalDate,
-    var endDate: LocalDate,
 
     @OneToMany(mappedBy = "schedule", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     var presentations: MutableList<Presentation> = mutableListOf(),

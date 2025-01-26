@@ -33,8 +33,29 @@ class ConferenceService(private val conferenceRepository: ConferenceRepository,
         existingConference.startDate = updatedConference.startDate
         existingConference.endDate = updatedConference.endDate
         existingConference.category = updatedConference.category
-        existingConference.schedules.clear()
-        existingConference.schedules.addAll(updatedConference.schedules)
+
+        // Manage schedules
+        val existingSchedules = existingConference.schedules
+        val updatedSchedules = updatedConference.schedules
+
+        // Remove schedules that are no longer present in the update
+        val schedulesToRemove = existingSchedules.filter { existing ->
+            updatedSchedules.none { updated -> updated.id == existing.id }
+        }
+        existingSchedules.removeAll(schedulesToRemove)
+
+        // Update existing schedules or add new ones
+        for (updatedSchedule in updatedSchedules) {
+            val existingSchedule = existingSchedules.find { it.id == updatedSchedule.id }
+            if (existingSchedule != null) {
+                // For existing schedules, update the fields
+                existingSchedule.startDate = updatedSchedule.startDate
+            } else {
+                // For new schedules, add them to the list
+                existingSchedules.add(updatedSchedule)
+            }
+        }
+
         existingConference.updatedAt = LocalDateTime.now()
 
         return conferenceRepository.save(existingConference)
