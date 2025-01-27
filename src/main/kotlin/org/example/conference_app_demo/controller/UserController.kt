@@ -3,6 +3,8 @@ package org.example.conference_app_demo.controller
 import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.service.UserService
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -10,9 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
 
-@RestController
+
+@Controller
 @RequestMapping("/users")
 class UserController(private val userService: UserService) {
 
@@ -23,9 +25,10 @@ class UserController(private val userService: UserService) {
     }
 
     @GetMapping("/{id}")
-    fun getUserById(@PathVariable id: Long): ResponseEntity<User> {
+    fun getUserById(@PathVariable id: Long, model: Model): String {
         val user = userService.findById(id)
-        return ResponseEntity.ok(user)
+        model.addAttribute("user", user)
+        return "user/user-details"
     }
 
     @PostMapping

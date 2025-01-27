@@ -19,11 +19,11 @@
         <p>
             Conference: <span th:text="${presentation.conference.name}"></span>
         </p>
-        <p>Authors:</p>
+        <p>Speakers:</p>
         <ul>
             <li th:each="author : ${presentation.speakers}"
                 class="hover:text-yellow-600 transition-colors duration-200 hover:underline">
-                <a th:href="@{/user/{id}(id=${presentation.id})}"
+                <a th:href="@{/users/{id}(id=${author.id})}"
                    hx-target="#main-content"
                    hx-swap="innerHTML"
                 >
