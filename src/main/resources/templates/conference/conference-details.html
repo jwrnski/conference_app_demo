@@ -40,7 +40,6 @@
                         <li th:each="presentation : ${schedule.presentations}" class="p-3 bg-gray-50 rounded shadow">
                             <a th:href="@{/presentations/{id}(id=${presentation.id})}">
                             <div class="font-bold text-gray-800" th:text="${presentation.title}" ></div>
-                            <div class="text-gray-600" th:text="${presentation.description}"></div>
                             <div class="text-sm text-gray-500 italic" th:text="${presentation.startTime} + ' - ' + ${presentation.endTime}"></div>
                             <div class="text-sm text-gray-700">
                                 Speakers:

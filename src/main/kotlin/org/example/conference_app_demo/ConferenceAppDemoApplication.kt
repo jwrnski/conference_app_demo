@@ -61,11 +61,17 @@ class DatabaseInitializer(private val topicRepository: TopicRepository,
             }
         }
 
-        val institution = Institution(name = "UMG", country = "Poland", city = "Gdynia", url = "https://umg.edu.pl")
-        if (!institutionRepository.existsByName(institution.name)) {
-            institutionRepository.save(institution)
-        }
 
+        val institutions = listOf(
+            Institution(name = "Uniwersytet Morski w Gdyni", country = "Poland", city = "Gdynia", url = "https://umg.edu.pl"),
+            Institution(name = "Politechnika Gdańska", country = "Poland", city = "Gdańsk", url = "https://pg.edu.pl/"),
+            Institution(name = "Politechnika Warszawska", country = "Poland", city = "Warszawa", url = "https://www.pw.edu.pl/"))
+        institutions.forEach{
+            institution ->
+            if(!institutionRepository.existsByName(institution.name)) {
+                institutionRepository.save(institution)
+            }
+        }
 
     }
 }

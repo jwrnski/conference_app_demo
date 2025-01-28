@@ -5,15 +5,21 @@
 <div th:replace="~{fragments/nav :: nav}"></div>
 <main class="flex-grow">
     <div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4">All Conferences</h1>
-        <ul >
-            <li th:each="conference : ${conferences}"
-                class="hover:text-yellow-600 transition-colors duration-200 hover:underline">
-                <a th:href="@{/conferences/{id}(id=${conference.id})}"
-                   hx-target="#main-content"
-                   hx-swap="innerHTML"
-                   >
-                    <span th:text="${conference.name}">Conference Name</span>
+    <h1 class="text-2xl font-bold mb-4 ">All Conferences</h1>
+        <ul class="space-y-4">
+            <li th:each="conference : ${conferences}">
+                <a
+                        th:href="@{/conferences/{id}(id=${conference.id})}"
+                        hx-target="#main-content"
+                        hx-swap="innerHTML"
+                        class="block border border-gray-300 rounded-lg p-4 hover:border-yellow-600 transition-colors duration-200 space-y-2"
+                >
+                    <div class="flex flex-col space-y-2">
+                        <p class="font-bold text-lg" th:text="${conference.name}">Conference Name</p>
+                        <p class="text-gray-500 text-sm" th:text="${conference.description}">Description</p>
+                        <p class="text-gray-500 text-sm" th:text="${conference.startDate}">Start Date</p>
+                        <p class="text-gray-500 text-sm" th:text="${conference.endDate}">End Date</p>
+                    </div>
                 </a>
             </li>
         </ul>

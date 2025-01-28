@@ -6,7 +6,11 @@ module.exports = {
     './src/**/*.{js,ts,jsx,tsx}'// Include paths for any Java class embedding Tailwind classes
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        atkinson: ['Atkinson Hyperlegible', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 };
