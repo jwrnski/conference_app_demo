@@ -1,6 +1,7 @@
 package org.example.conference_app_demo.model
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
+import jakarta.validation.constraints.NotBlank
 import java.time.LocalDateTime
 
 @Entity
@@ -9,8 +10,12 @@ class Submission(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
+
+    @NotBlank(message = "Paper title is required!")
     var paperTitle: String,
+    @NotBlank(message = "Paper abstract is required!")
     var abstract: String,
+    @NotBlank(message = "Select a file!")
     var filePath: String,
 
     @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
@@ -20,6 +25,7 @@ class Submission(
     @JoinColumn(name = "conference_id", nullable = false)
     var conference: Conference? = null,
 
+    @NotBlank(message = "Select at least one topic!")
     @ManyToMany
     @JoinTable(
         name = "submission_topics",

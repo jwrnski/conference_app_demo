@@ -33,7 +33,9 @@ class PresentationController(
     }
 
     @GetMapping("/create-presentation")
-    fun createPresentationPage(@RequestParam conferenceId: Long, model: Model): String {
+    fun createPresentationPage(@RequestParam conferenceId: Long,
+                               @RequestParam(required = false) scheduleId: Long?,
+                               model: Model): String {
         model.addAttribute("conferenceId", conferenceId);
         val conferenceName = conferenceService.getNameById(conferenceId)
         model.addAttribute("conferenceName", conferenceName)
@@ -43,6 +45,12 @@ class PresentationController(
         model.addAttribute("submissions", submissions)
         val schedules = scheduleService.findByConferenceId(conferenceId)
         model.addAttribute("schedules", schedules)
+        if (scheduleId != null) {
+            val selectedSchedule = scheduleService.findById(scheduleId)
+            model.addAttribute("selectedSchedule", selectedSchedule)
+        } else {
+            model.addAttribute("selectedSchedule", null)
+        }
         return "presentation/create-presentation"
     }
 
