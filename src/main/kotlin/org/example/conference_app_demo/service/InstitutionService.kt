@@ -1,6 +1,5 @@
 package org.example.conference_app_demo.service
 
-import org.example.conference_app_demo.dto.InstitutionDTO
 import org.example.conference_app_demo.model.Institution
 import org.example.conference_app_demo.repository.InstitutionRepository
 import org.springframework.stereotype.Service

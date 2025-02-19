@@ -1,6 +1,10 @@
 package org.example.conference_app_demo.service
 
+import org.example.conference_app_demo.dto.ConferenceDTO
 import org.example.conference_app_demo.model.Conference
+import org.example.conference_app_demo.model.ConferenceCategory
+import org.example.conference_app_demo.model.Country
+import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.repository.ConferenceRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -86,40 +90,32 @@ class ConferenceService(private val conferenceRepository: ConferenceRepository,
     fun count() = conferenceRepository.count();
     fun existsById(id: Long) = conferenceRepository.existsById(id);
 
-    /*fun toDTO(conference: Conference): ConferenceDTO {
+    fun toEntity(conferenceDTO: ConferenceDTO, organizer: User): Conference {
+        return Conference(
+            name = conferenceDTO.name,
+            city = conferenceDTO.city,
+            country = conferenceDTO.country!!,
+            description = conferenceDTO.description,
+            startDate = conferenceDTO.startDate!!,
+            endDate = conferenceDTO.endDate!!,
+            category = conferenceDTO.category!!,
+            organizer = organizer
+        )
+    }
+
+    fun toDTO(conference: Conference): ConferenceDTO {
         return ConferenceDTO(
             id = conference.id,
             name = conference.name,
             city = conference.city,
-            url = conference.url,
+            country = conference.country,
             description = conference.description,
             startDate = conference.startDate,
             endDate = conference.endDate,
-            tags = conference.tags,
-            schedules = conference.schedules.map { scheduleService.toDTO(it) }, // Use scheduleService to map schedules
-            createdAt = conference.createdAt,
-            updatedAt = conference.updatedAt
+            category = conference.category
         )
     }
 
-    fun toEntity(dto: ConferenceDTO): Conference {
-        val conference = Conference(
-            id = dto.id,
-            name = dto.name,
-            city = dto.city,
-            url = dto.url,
-            description = dto.description,
-            startDate = dto.startDate,
-            endDate = dto.endDate,
-            tags = dto.tags,
-            schedules = mutableListOf() // Initialize empty for now
-        )
-
-        // Map schedules and pass the current Conference instance
-        conference.schedules = dto.schedules.map { scheduleService.toEntity(it, conference) }.toMutableList()
-
-        return conference
-    }*/
 
 
 }

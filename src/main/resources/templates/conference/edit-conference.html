@@ -7,113 +7,92 @@
 <main class="flex-grow">
     <div class="container mx-auto p-6">
         <h1 class="text-2xl font-bold mb-4">Edit <span th:text="${conference.name}"></span></h1>
-        <form th:action="@{/conferences/edit/{id}(id=${conference.id})}" method="post" class="bg-white p-6 rounded shadow-sm">
+        <form th:action="@{/conferences/edit/{id}(id=${conference.id})}" th:object="${conference}" method="post" class="bg-white p-6 rounded shadow-sm">
             <input type="hidden" name="_method" value="put"/>
             <input type="hidden" name="id" th:value="${conference.id}" />
             <!-- Name Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
-                    Name
-                </label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
                 <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="name"
                         name="name"
+                        th:value="*{name}"
                         type="text"
-                        placeholder="Conference Name"
-                        th:value="${conference.name}"
-                        required>
+                        placeholder="Conference Name">
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red; font-style: italic"></p> <!-- Error Message -->
             </div>
 
-            <!-- City Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
-                    City
-                </label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="country">Country</label>
+                <select id="country" name="country"
+                        class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
+                    <option disabled selected>-- Select Country --</option>
+                    <option th:each="country : ${countries}" th:value="${country.name()}" th:text="${country}">
+                    </option>
+                </select>
+                <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color:red; font-style: italic"></p>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="city">City</label>
                 <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="city"
                         name="city"
+                        th:value="*{city}"
                         type="text"
-                        placeholder="City"
-                        th:value="${conference.city}"
-                        required>
+                        placeholder="City">
+                <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color:red; font-style: italic"></p>
             </div>
 
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="url">
-                    url
-                </label>
-                <input
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="url"
-                        name="url"
-                        type="text"
-                        placeholder="City"
-                        th:value="${conference.country}"
-                        required>
-            </div>
-
-            <!-- Description Field -->
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
-                    Description
-                </label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">Description</label>
                 <textarea
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="description"
                         name="description"
+                        th:value="*{description}"
                         placeholder="Conference Description"
-                        th:text="${conference.description}"
-                        rows="3"
-                        required></textarea>
+                        rows="3"></textarea>
+                <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color:red; font-style: italic"></p>
             </div>
 
             <!-- Start Date Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">
-                    Start Date
-                </label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">Start Date</label>
                 <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="startDate"
                         name="startDate"
-                        type="datetime-local"
-                        th:value="${conference.startDate}"
-                        required>
+                        th:value="*{startDate}"
+                        type="date">
+                <p th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" style="color:red; font-style: italic"></p>
             </div>
 
             <!-- End Date Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="endDate">
-                    End Date
-                </label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="endDate">End Date</label>
                 <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="endDate"
                         name="endDate"
-                        type="datetime-local"
-                        th:value="${conference.endDate}"
-                        required>
+                        th:value="*{endDate}"
+                        type="date">
+                <p th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" style="color:red; font-style: italic"></p>
             </div>
 
-            <!-- Keywords Dropdown -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="tags">
-                    Select Keyword
-                </label>
-                <select
-                        id="tags"
-                        name="tags"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required>
-                    <option value="Technology" th:selected="${conference.tags == 'Technology'}">Technology</option>
-                    <option value="Computer Science" th:selected="${conference.tags == 'Computer Science'}">Computer Science</option>
-                    <option value="Electronics" th:selected="${conference.tags == 'Electronics'}">Electronics</option>
-                    <option value="Science" th:selected="${conference.tags == 'Science'}">Science</option>
-                    <option value="Programming" th:selected="${conference.tags == 'Programming'}">Programming</option>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="category">Category</label>
+                <select id="category" name="category"
+                        class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
+                    <option disabled selected>-- Select Category --</option>
+                    <option th:each="category : ${categories}" th:value="${category.name()}" th:text="${category}">
+                    </option>
                 </select>
+                <p th:if="${#fields.hasErrors('category')}" th:errors="*{category}" style="color:red; font-style: italic"></p>
             </div>
+
             <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
                     type="submit"
             >

@@ -1,6 +1,5 @@
 package org.example.conference_app_demo.service
 
-import org.example.conference_app_demo.service.UserService
 import org.example.conference_app_demo.model.Conference
 import org.example.conference_app_demo.model.Registration
 import org.example.conference_app_demo.model.User

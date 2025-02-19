@@ -1,5 +1,8 @@
 package org.example.conference_app_demo.controller
 
+import jakarta.validation.Valid
+import org.example.conference_app_demo.auth.CustomUserDetails
+import org.example.conference_app_demo.dto.ConferenceDTO
 import org.example.conference_app_demo.model.*
 import org.example.conference_app_demo.repository.RegistrationRepository
 import org.example.conference_app_demo.service.ConferenceService
@@ -8,7 +11,9 @@ import org.example.conference_app_demo.service.UserService
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 
 @Controller
 @RequestMapping("/conferences")
@@ -20,8 +25,26 @@ class ConferenceController(
 ) {
 
     @PostMapping
-    fun createConference(@ModelAttribute conference: Conference,
-                         @RequestParam("userId") userId: Long): String {
+    fun createConference(@Valid @ModelAttribute("conference") conferenceDTO: ConferenceDTO,
+                         bindingResult: BindingResult,
+                         @RequestParam("userId") userId: Long,
+                         model: Model
+                         ): String {
+
+        // Field Validation, return if there are errors
+        if (bindingResult.hasErrors()) {
+            bindingResult.allErrors.forEach {error -> println("\nValidation error: ${error.defaultMessage}\n") }
+            model.addAttribute("categories", ConferenceCategory.entries.toTypedArray())
+            model.addAttribute("countries", Country.entries.toTypedArray())
+            model.addAttribute("userId", userId)
+            model.addAttribute("conference", conferenceDTO)
+            return "conference/create-conference" // Return the form page with errors
+        }
+
+        val loggedInUser = userService.findById(userId)
+
+        val conference = conferenceService.toEntity(conferenceDTO, loggedInUser)
+
         var currentDate = conference.startDate
         while (!currentDate.isAfter(conference.endDate)) {
             val schedule = Schedule(
@@ -31,8 +54,7 @@ class ConferenceController(
             conference.schedules.add(schedule) // Add schedule to the conference's schedule list
             currentDate = currentDate.plusDays(1) // Increment the date
         }
-        val organizer = userService.findById(userId)
-        conference.organizer = organizer
+
         conferenceService.save(conference);
         conferenceService.update(conference, conference.id)
 
@@ -45,15 +67,26 @@ class ConferenceController(
         model.addAttribute("countries", Country.entries.toTypedArray())
         val authenticatedUser = SecurityContextHolder.getContext().authentication
         val principal = authenticatedUser.principal
-        if (principal is org.example.conference_app_demo.auth.CustomUserDetails) {
+        if (principal is CustomUserDetails) {
             val userId = principal.getId()
             model.addAttribute("userId", userId)
         }
+        model.addAttribute("conference", ConferenceDTO())
         return "conference/create-conference"
     }
 
     @PutMapping("/edit/{id}")
-    fun updateConference(@PathVariable id:Long, @ModelAttribute conference: Conference): String {
+    fun updateConference(@PathVariable id:Long, @Valid @ModelAttribute("conference") conferenceDTO: ConferenceDTO,
+                         bindingResult: BindingResult, model: Model
+    ): String {
+        if(bindingResult.hasErrors()){
+            model.addAttribute("categories", ConferenceCategory.entries.toTypedArray())
+            model.addAttribute("countries", Country.entries.toTypedArray())
+            model.addAttribute("conference", conferenceDTO)
+            return "conference/edit-conference"
+        }
+        val organizer = conferenceService.findById(id).organizer
+        val conference = conferenceService.toEntity(conferenceDTO, organizer)
         conferenceService.update(conference, id);
         return "redirect:/conferences/$id";
     }
@@ -68,7 +101,7 @@ class ConferenceController(
         model.addAttribute("month", month)
         val authenticatedUser = SecurityContextHolder.getContext().authentication
         val principal = authenticatedUser.principal
-        if (principal is org.example.conference_app_demo.auth.CustomUserDetails) {
+        if (principal is CustomUserDetails) {
             val userId = principal.getId()
             model.addAttribute("userId", userId)
             val isRegistered = registrationService.isUserRegistered(conference.id, userId)
@@ -85,7 +118,13 @@ class ConferenceController(
     @GetMapping("/edit/{id}")
     fun getEditConferencePage(@PathVariable id: Long, model: Model): String {
         val conference = conferenceService.findById(id)
-        model.addAttribute("conference", conference)
+        val conferenceDTO = conferenceService.toDTO(conference)
+        val category = conference.category
+        model.addAttribute("category", category)
+        val country = conference.country
+        model.addAttribute("country", country)
+        model.addAttribute("conference", conferenceDTO)
+        model.addAttribute("categories", ConferenceCategory.entries.toTypedArray())
         return "conference/edit-conference"
     }
 
@@ -99,7 +138,7 @@ class ConferenceController(
     @DeleteMapping("/{id}")
     fun deleteConferenceById(@PathVariable id: Long): String{
         conferenceService.deleteById(id);
-        return "redirect:conference/conferences";
+        return "conference/conferences";
     }
 
 }

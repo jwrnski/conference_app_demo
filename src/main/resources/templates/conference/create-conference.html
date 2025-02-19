@@ -1,102 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-<div th:replace="~{fragments/header :: header}"></div>
-<body class="flex flex-col min-h-screen bg-gray-100"> <!-- Added a background for better visibility -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Conference</title>
+    <div th:replace="~{fragments/header :: header}"></div>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100">
 <div th:replace="~{fragments/nav :: nav}"></div>
 
 <main class="flex-grow">
     <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-4">Create a conference</h1>
-        <form th:action="@{/conferences}" method="post" class="bg-white p-6 rounded shadow-sm">
-            <input type="hidden" th:value="${userId}" name="userId" />
+        <h1 class="text-2xl font-bold mb-4">Create a Conference</h1>
+        <!-- Bind the form object here -->
+        <form th:action="@{/conferences}" th:object="${conference}" method="post" class="bg-white p-6 rounded shadow-sm">
+            <!-- Hidden Field for Capturing User ID -->
+            <input type="hidden" th:value="${userId}" name="userId"/>
+
+            <!-- Name Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
-                    Name
-                </label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
                 <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="name"
                         name="name"
-                        type="text"
-                        placeholder="Conference Name"
-                        required>
+                        th:value="*{name}"
+                type="text"
+                placeholder="Conference Name">
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red; font-style: italic"></p> <!-- Error Message -->
             </div>
 
+            <!-- Country Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="country">Category</label>
-                <select id="country" name="country" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
-                    <option disabled>-- Select Country --</option>
-                    <option th:each="country : ${countries}"
-                            th:value="${country.name()}"
-                            th:text="${country}"></option>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="country">Country</label>
+                <select id="country" name="country"
+                        class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
+                    <option disabled selected>-- Select Country --</option>
+                    <option th:each="country : ${countries}" th:value="${country.name()}" th:text="${country}">
+                    </option>
                 </select>
+                <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color:red; font-style: italic"></p>
             </div>
 
             <!-- City Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="city">
-                    City
-                </label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="city">City</label>
                 <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="city"
                         name="city"
+                        th:value="*{city}"
                         type="text"
-                        placeholder="City"
-                        required>
+                        placeholder="City">
+                <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color:red; font-style: italic"></p>
             </div>
 
+            <!-- Description Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
-                    Description
-                </label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="description">Description</label>
                 <textarea
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="description"
                         name="description"
+                        th:value="*{description}"
                         placeholder="Conference Description"
-                        rows="3"
-                        required></textarea>
+                        rows="3"></textarea>
+                <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color:red; font-style: italic"></p>
             </div>
 
+            <!-- Start Date Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">
-                    Start Date
-                </label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">Start Date</label>
                 <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="startDate"
                         name="startDate"
-                        type="date"
-                        required>
+                        th:value="*{startDate}"
+                        type="date">
+                <p th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" style="color:red; font-style: italic"></p>
             </div>
 
+            <!-- End Date Field -->
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="endDate">
-                    End Date
-                </label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="endDate">End Date</label>
                 <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="endDate"
                         name="endDate"
-                        type="date"
-                        required>
+                        th:value="*{endDate}"
+                        type="date">
+                <p th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" style="color:red; font-style: italic"></p>
             </div>
 
+            <!-- Category Field -->
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="category">Category</label>
-                <select id="category" name="category" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
-                    <option disabled>-- Select Category --</option>
-                    <option th:each="category : ${categories}"
-                            th:value="${category.name()}"
-                            th:text="${category}"></option>
+                <select id="category" name="category"
+                        class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
+                    <option disabled selected>-- Select Category --</option>
+                    <option th:each="category : ${categories}" th:value="${category.name()}" th:text="${category}">
+                    </option>
                 </select>
+                <p th:if="${#fields.hasErrors('category')}" th:errors="*{category}" style="color:red; font-style: italic"></p>
             </div>
 
-            <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
-                    type="submit"
-                    >
-                    Create Conference
+            <!-- Submit Button -->
+            <button type="submit" style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
+                Create Conference
             </button>
         </form>
     </div>
