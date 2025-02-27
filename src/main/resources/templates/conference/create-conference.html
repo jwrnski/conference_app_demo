@@ -25,8 +25,9 @@
                         id="name"
                         name="name"
                         th:value="*{name}"
-                type="text"
-                placeholder="Conference Name">
+                        type="text"
+                        placeholder="Conference Name"
+                        required>
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red; font-style: italic"></p> <!-- Error Message -->
             </div>
 
@@ -36,8 +37,9 @@
                 <select id="country" name="country"
                         class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
                     <option disabled selected>-- Select Country --</option>
-                    <option th:each="country : ${countries}" th:value="${country.name()}" th:text="${country}">
+                    <option th:each="country : ${countries}" th:value="${country.name()}" th:text="${country}" >
                     </option>
+                    required
                 </select>
                 <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color:red; font-style: italic"></p>
             </div>
@@ -51,7 +53,8 @@
                         name="city"
                         th:value="*{city}"
                         type="text"
-                        placeholder="City">
+                        placeholder="City"
+                        required>
                 <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}" style="color:red; font-style: italic"></p>
             </div>
 
@@ -64,7 +67,9 @@
                         name="description"
                         th:value="*{description}"
                         placeholder="Conference Description"
-                        rows="3"></textarea>
+                        rows="3"
+                        required>
+                </textarea>
                 <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color:red; font-style: italic"></p>
             </div>
 
@@ -76,7 +81,8 @@
                         id="startDate"
                         name="startDate"
                         th:value="*{startDate}"
-                        type="date">
+                        type="date"
+                        required>
                 <p th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" style="color:red; font-style: italic"></p>
             </div>
 
@@ -88,7 +94,8 @@
                         id="endDate"
                         name="endDate"
                         th:value="*{endDate}"
-                        type="date">
+                        type="date"
+                        required>
                 <p th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" style="color:red; font-style: italic"></p>
             </div>
 
@@ -98,8 +105,11 @@
                 <select id="category" name="category"
                         class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline">
                     <option disabled selected>-- Select Category --</option>
-                    <option th:each="category : ${categories}" th:value="${category.name()}" th:text="${category}">
+                    <option th:each="category : ${categories}"
+                            th:value="${category.name()}"
+                            th:text="${category}">
                     </option>
+                    required
                 </select>
                 <p th:if="${#fields.hasErrors('category')}" th:errors="*{category}" style="color:red; font-style: italic"></p>
             </div>

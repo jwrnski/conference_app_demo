@@ -1,9 +1,7 @@
 package org.example.conference_app_demo.service
 
-import org.example.conference_app_demo.dto.ConferenceDTO
+import org.example.conference_app_demo.dto.ConferenceDto
 import org.example.conference_app_demo.model.Conference
-import org.example.conference_app_demo.model.ConferenceCategory
-import org.example.conference_app_demo.model.Country
 import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.repository.ConferenceRepository
 import org.springframework.stereotype.Service
@@ -90,7 +88,7 @@ class ConferenceService(private val conferenceRepository: ConferenceRepository,
     fun count() = conferenceRepository.count();
     fun existsById(id: Long) = conferenceRepository.existsById(id);
 
-    fun toEntity(conferenceDTO: ConferenceDTO, organizer: User): Conference {
+    fun toEntity(conferenceDTO: ConferenceDto, organizer: User): Conference {
         return Conference(
             name = conferenceDTO.name,
             city = conferenceDTO.city,
@@ -103,8 +101,8 @@ class ConferenceService(private val conferenceRepository: ConferenceRepository,
         )
     }
 
-    fun toDTO(conference: Conference): ConferenceDTO {
-        return ConferenceDTO(
+    fun toDto(conference: Conference): ConferenceDto {
+        return ConferenceDto(
             id = conference.id,
             name = conference.name,
             city = conference.city,

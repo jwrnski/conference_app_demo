@@ -2,7 +2,7 @@ package org.example.conference_app_demo.controller
 
 import jakarta.validation.Valid
 import org.example.conference_app_demo.auth.CustomUserDetails
-import org.example.conference_app_demo.dto.ConferenceDTO
+import org.example.conference_app_demo.dto.ConferenceDto
 import org.example.conference_app_demo.model.*
 import org.example.conference_app_demo.repository.RegistrationRepository
 import org.example.conference_app_demo.service.ConferenceService
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDate
 
 @Controller
 @RequestMapping("/conferences")
@@ -25,7 +24,7 @@ class ConferenceController(
 ) {
 
     @PostMapping
-    fun createConference(@Valid @ModelAttribute("conference") conferenceDTO: ConferenceDTO,
+    fun createConference(@Valid @ModelAttribute("conference") conferenceDTO: ConferenceDto,
                          bindingResult: BindingResult,
                          @RequestParam("userId") userId: Long,
                          model: Model
@@ -33,7 +32,7 @@ class ConferenceController(
 
         // Field Validation, return if there are errors
         if (bindingResult.hasErrors()) {
-            bindingResult.allErrors.forEach {error -> println("\nValidation error: ${error.defaultMessage}\n") }
+            //bindingResult.allErrors.forEach {error -> println("\nValidation error: ${error.defaultMessage}\n") }
             model.addAttribute("categories", ConferenceCategory.entries.toTypedArray())
             model.addAttribute("countries", Country.entries.toTypedArray())
             model.addAttribute("userId", userId)
@@ -71,12 +70,12 @@ class ConferenceController(
             val userId = principal.getId()
             model.addAttribute("userId", userId)
         }
-        model.addAttribute("conference", ConferenceDTO())
+        model.addAttribute("conference", ConferenceDto())
         return "conference/create-conference"
     }
 
     @PutMapping("/edit/{id}")
-    fun updateConference(@PathVariable id:Long, @Valid @ModelAttribute("conference") conferenceDTO: ConferenceDTO,
+    fun updateConference(@PathVariable id:Long, @Valid @ModelAttribute("conference") conferenceDTO: ConferenceDto,
                          bindingResult: BindingResult, model: Model
     ): String {
         if(bindingResult.hasErrors()){
@@ -95,10 +94,12 @@ class ConferenceController(
     fun getConferenceDetails(@PathVariable id: Long, model: Model): String {
         val conference = conferenceService.findById(id)
         model.addAttribute("conference", conference)
+
         val day = conference.startDate.dayOfMonth
         val month = conference.startDate.monthValue
         model.addAttribute("day", day)
         model.addAttribute("month", month)
+
         val authenticatedUser = SecurityContextHolder.getContext().authentication
         val principal = authenticatedUser.principal
         if (principal is CustomUserDetails) {
@@ -118,7 +119,7 @@ class ConferenceController(
     @GetMapping("/edit/{id}")
     fun getEditConferencePage(@PathVariable id: Long, model: Model): String {
         val conference = conferenceService.findById(id)
-        val conferenceDTO = conferenceService.toDTO(conference)
+        val conferenceDTO = conferenceService.toDto(conference)
         val category = conference.category
         model.addAttribute("category", category)
         val country = conference.country

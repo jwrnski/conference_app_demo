@@ -1,13 +1,23 @@
 package org.example.conference_app_demo.service
 
+import org.example.conference_app_demo.dto.SubmissionDto
 import org.example.conference_app_demo.model.Submission
 import org.example.conference_app_demo.model.SubmissionStatus
+import org.example.conference_app_demo.model.Topic
+import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.repository.SubmissionRepository
+import org.example.conference_app_demo.repository.TopicRepository
+import org.example.conference_app_demo.repository.UserRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class SubmissionService(private val submissionRepository: SubmissionRepository) {
+class SubmissionService(
+    private val submissionRepository: SubmissionRepository,
+    private val userRepository: UserRepository,
+    private val conferenceService: ConferenceService,
+    private val topicRepository: TopicRepository
+) {
 
 
     fun save(submission: Submission): Submission {
@@ -59,34 +69,50 @@ class SubmissionService(private val submissionRepository: SubmissionRepository) 
         return submissionRepository.save(existingSubmission)
     }
 
-    /*fun toDTO(submission: Submission): SubmissionDTO {
-        return SubmissionDTO(
+    fun toDto(submission: Submission): SubmissionDto {
+        return SubmissionDto(
             id = submission.id,
-            abstractTitle = submission.paperTitle,
-            content = submission.content,
-            author = submission.author,
-            conference = submission.conference,
-            topic = submission.category,
-            status = submission.status,
-            rating = submission.rating,
-            comments = submission.comments,
-            createdAt = submission.createdAt,
-            updatedAt = submission.updatedAt
+            paperTitle = submission.paperTitle,
+            abstract = submission.abstract,
+            filePath = submission.filePath,
+            authorId = submission.authors.firstOrNull()?.id,
+            conferenceId = submission.conference?.id,
+            topicId = submission.topics.firstOrNull()?.id,
         )
     }
-    fun toEntity(dto: SubmissionDTO): Submission {
+
+    fun toEntity(submissionDto: SubmissionDto): Submission {
         return Submission(
-            id = dto.id,
-            paperTitle = dto.abstractTitle,
-            content = dto.content,
-            author = dto.author,
-            conference = dto.conference,
-            category = dto.topic,
-            status = dto.status,
-            rating = dto.rating,
-            comments = dto.comments,
-            createdAt = dto.createdAt,
-            updatedAt = dto.updatedAt
+            paperTitle = submissionDto.paperTitle,
+            abstract = submissionDto.abstract,
+            filePath = submissionDto.filePath,
+            authors = findAuthorAsList(submissionDto.authorId),
+            conference = conferenceService.findById(submissionDto.conferenceId!!),
+            topics = findTopicsAsList(submissionDto.topicId),
+            comments = "This paper has been submitted and is pending review",
+            status = SubmissionStatus.PENDING
         )
-    }*/
+    }
+
+    private fun findTopicsAsList(topicId: Long?): MutableList<Topic> {
+        if (topicId == null) {
+            throw IllegalArgumentException("Topic ID must not be null")
+        }
+        val topic = topicRepository.findById(topicId).orElseThrow {
+            Exception("Topic with ID $topicId not found")
+        }
+        return mutableListOf(topic)
+    }
+
+    private fun findAuthorAsList(authorId: Long?): MutableList<User> {
+        if (authorId == null) {
+            throw IllegalArgumentException("Author ID must not be null")
+        }
+        val author = userRepository.findById(authorId).orElseThrow {
+            Exception("Author with ID $authorId not found")
+        }
+        return mutableListOf(author)
+    }
+
+
 }

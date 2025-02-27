@@ -1,5 +1,7 @@
 package org.example.conference_app_demo.controller
 
+import jakarta.validation.Valid
+import org.example.conference_app_demo.dto.SubmissionDto
 import org.example.conference_app_demo.model.Submission
 import org.example.conference_app_demo.model.SubmissionStatus
 import org.example.conference_app_demo.model.Topic
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 
 @Controller
@@ -41,35 +44,47 @@ class SubmissionController(
     fun getSubmissionFormPage(@RequestParam("conferenceId") conferenceId: Long, model: Model): String{
         val conference = conferenceService.findById(conferenceId)
         model.addAttribute("conferenceId", conference.id)
+
         val conferenceName = conferenceService.getNameById(conferenceId)
         model.addAttribute("conferenceName", conferenceName)
-        val authenticatedUser = SecurityContextHolder.getContext().authentication
-        val principal = authenticatedUser.principal
-        if (principal is org.example.conference_app_demo.auth.CustomUserDetails) {
-            val userId = principal.getId()
-            model.addAttribute("userId", userId)
-        }
+
+        val authorId = userService.getLoggedInUserId()
+        model.addAttribute("authorId", authorId)
+
         val comments = "This submission is under review."
         model.addAttribute("comments", comments)
+
         val topics = topicRepository.findByConferenceCategory(conference.category)
         model.addAttribute("topics", topics)
+
+        val submission = SubmissionDto(authorId = authorId)
+        model.addAttribute("submission", submission)
+
         return "submission/submission-form"
     }
 
     @PostMapping
-    fun createSubmission(@ModelAttribute submission: Submission,
-                         @RequestParam("conferenceId") conferenceId: Long,
-                         @RequestParam("userId") user: User,
-                         @RequestParam("comments") comments: String,
-                         @RequestParam("topics") selectedTopics: List<Long>): String{
-        val conference = conferenceService.findById(conferenceId)
-        submission.conference = conference
-        val author = userService.findById(user.id)
-        submission.authors.add(author)
-        submission.comments = comments
-        val topics = topicRepository.findAllById(selectedTopics)
-        submission.topics = topics.toMutableList()
+    fun createSubmission(@Valid @ModelAttribute("submission") submissionDto: SubmissionDto,
+                         bindingResult: BindingResult,
+                         model: Model,
+                         ): String{
+
+        if(bindingResult.hasErrors()){
+            bindingResult.allErrors.forEach {error -> println("\nValidation error: ${error.defaultMessage}\n") }
+            val conference = conferenceService.findById(submissionDto.conferenceId!!)
+            model.addAttribute("conferenceName", conference.name)
+            model.addAttribute("conferenceId", submissionDto.conferenceId)
+            model.addAttribute("submission", submissionDto)
+            model.addAttribute("authorId", submissionDto.authorId)
+            model.addAttribute("topics", topicRepository.findByConferenceCategory(conference.category))
+            return "submission/submission-form"
+        }
+
+        val conferenceId = submissionDto.conferenceId!!
+
+        val submission = submissionService.toEntity(submissionDto)
         submissionService.save(submission)
+
         return "redirect:/conferences/$conferenceId"
     }
 

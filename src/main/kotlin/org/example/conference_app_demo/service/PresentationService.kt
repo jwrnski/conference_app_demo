@@ -1,12 +1,18 @@
 package org.example.conference_app_demo.service
 
+import org.example.conference_app_demo.dto.PresentationDto
 import org.springframework.stereotype.Service
 import org.example.conference_app_demo.model.Presentation
+import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.repository.PresentationRepository
 import java.time.LocalDateTime
 
 @Service
-class PresentationService(private val userService: UserService, private val presentationRepository: PresentationRepository) {
+class PresentationService(
+    private val userService: UserService,
+    private val presentationRepository: PresentationRepository,
+    private val scheduleService: ScheduleService
+) {
 
     fun save(presentation: Presentation): Presentation {
         return presentationRepository.save(presentation)
@@ -36,31 +42,21 @@ class PresentationService(private val userService: UserService, private val pres
         return presentationRepository.save(existingPresentation)
     }
 
-
-
-    /*fun toDTO(presentation: Presentation): PresentationDTO {
-        return PresentationDTO(
-            id = presentation.id,
-            title = presentation.title,
-            description = presentation.description,
-            startTime = presentation.startTime,
-            endTime = presentation.endTime,
-            scheduleId = presentation.schedule.id,
-            userIds = presentation.users.map { it.id }, // Extract user IDs
-            createdAt = presentation.createdAt,
-            updatedAt = presentation.updatedAt
+    fun toEntity(presentationDto: PresentationDto): Presentation {
+        return Presentation(
+            title = presentationDto.title!!,
+            description = presentationDto.description!!,
+            startTime = presentationDto.startTime!!,
+            endTime = presentationDto.endTime!!,
+            schedule = scheduleService.findById(presentationDto.scheduleId!!),
+            speakers = addToSpeakers(presentationDto.speakerId!!, presentationDto.id!!)
         )
     }
 
-    fun toEntity(dto: PresentationDTO, schedule: Schedule): Presentation {
-        return Presentation(
-            id = dto.id,
-            title = dto.title,
-            description = dto.description,
-            startTime = dto.startTime,
-            endTime = dto.endTime,
-            schedule = schedule, // Pass the parent Schedule entity
-            users = userService.findByIds(dto.userIds) // Use userService to resolve User entities
-        )
-    }*/
+    fun addToSpeakers(speakerId: Long, presentationId: Long): MutableList<User> {
+        val presentation = findById(presentationId)
+        val user = userService.findById(speakerId)
+        presentation.speakers.add(user)
+        return presentationRepository.save(presentation).speakers
+    }
 }

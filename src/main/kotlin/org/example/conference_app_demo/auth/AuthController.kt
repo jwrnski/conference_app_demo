@@ -1,14 +1,15 @@
-package org.example.conference_app_demo.controller
+package org.example.conference_app_demo.auth
 
+import jakarta.validation.Valid
+import org.example.conference_app_demo.dto.UserDto
 import org.example.conference_app_demo.model.Role
-import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.service.InstitutionService
 import org.example.conference_app_demo.service.UserService
 import org.springframework.context.annotation.Lazy
-import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 
 @Controller
@@ -19,34 +20,32 @@ class AuthController(private val userService: UserService,
 ) {
 
     @PostMapping("/register")
-    fun registerUser(
-        @RequestParam name: String,
-        @RequestParam surname: String,
-        @RequestParam title: String,
-        @RequestParam email: String,
-        @RequestParam password: String,
-        @RequestParam phone: String,
-        @RequestParam institutionId: Long,
-        @RequestParam role: Role
-    ): String {
-        val institution = institutionService.findById(institutionId)
-        val hashedPassword = passwordEncoder.encode(password)
-        println("Fetched institution: $institution")
-        val user = User(
-            name = name,
-            surname = surname,
-            title = title,
-            email = email,
-            password = hashedPassword,
-            phone = phone,
-            institution = institution,
-            role = role
-        )
+    fun registerUser(@Valid @ModelAttribute("user") userDto: UserDto, bindingResult: BindingResult, model: Model): String {
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("institutions", institutionService.findAll())
+            model.addAttribute("roles", Role.entries.toTypedArray())
+            val titles = listOf("Mr.", "Ms.", "Dr.", "Prof.")
+            model.addAttribute("titles", titles)
+            return "auth/register"
+        }
+
+        val user = userService.toEntity(userDto, passwordEncoder)
+
         userService.save(user)
-        //println("\nCALLED registerUser $name, $surname, $title, $email, $password, $phone, $institutionId, $role\n")
         return "redirect:/auth/login"
     }
 
+    @GetMapping("/register")
+    fun showRegistrationPage(model: Model): String {
+        val institutions = institutionService.findAll()
+        model.addAttribute("institutions", institutions)
+        model.addAttribute("roles", Role.entries.toTypedArray())
+        val titles = listOf("Mr.", "Ms.", "Dr.", "Prof.")
+        model.addAttribute("titles", titles)
+        model.addAttribute("user", UserDto())
+        return "auth/register"
+    }
 
     @PostMapping("/login")
     fun loginUser(@RequestParam email: String, @RequestParam password: String): String {
@@ -56,16 +55,6 @@ class AuthController(private val userService: UserService,
         } else {
             "redirect:/auth/login"
         }
-    }
-
-    @GetMapping("/register")
-    fun showRegistrationPage(model: Model): String {
-        val institutions = institutionService.findAll()
-        model.addAttribute("institutions", institutions)
-        model.addAttribute("roles", Role.entries.toTypedArray())
-        val titles = listOf("Mr.", "Ms.", "Dr.", "Prof.") // Dynamically configurable
-        model.addAttribute("titles", titles)
-        return "auth/register"
     }
 
     @GetMapping("/login")

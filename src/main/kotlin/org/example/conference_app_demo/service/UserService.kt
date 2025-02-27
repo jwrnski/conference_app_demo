@@ -1,13 +1,19 @@
 package org.example.conference_app_demo.service
 
+import org.example.conference_app_demo.dto.UserDto
 import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.repository.UserRepository
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
-class UserService(private val userRepository: UserRepository) {
+class UserService(
+    private val userRepository: UserRepository,
+    private val institutionService: InstitutionService
+) {
 
 
     fun findByIds(ids: List<Long>): MutableList<User> {
@@ -26,8 +32,14 @@ class UserService(private val userRepository: UserRepository) {
         return userRepository.findByEmail(email)
     }
 
-    fun getRegistrationId(){
-
+    fun getLoggedInUserId(): Long{
+        val authenticatedUser = SecurityContextHolder.getContext().authentication
+            ?: throw IllegalStateException("No authenticated user found in security context")
+        val principal = authenticatedUser.principal
+        if (principal is org.example.conference_app_demo.auth.CustomUserDetails) {
+            return principal.getId()
+        }
+        throw IllegalStateException("Unable to retrieve user ID: Principal is not an instance of CustomUserDetails")
     }
 
     fun deleteById(id: Long) {
@@ -53,36 +65,20 @@ class UserService(private val userRepository: UserRepository) {
         return userRepository.save(existingUser)
     }
 
-
-    /*fun toDTO(user: User): UserDTO {
-        return UserDTO(
-            id = user.id,
-            name = user.name,
-            surname = user.surname,
-            title = user.title,
-            email = user.email,
-            password = "",
-            phone = user.phone,
-            institution = user.institution,
-            role = user.role,
-            createdAt = user.createdAt,
-            updatedAt = user.updatedAt
+    fun toEntity(userDto: UserDto, passwordEncoder: PasswordEncoder): User {
+        return User(
+            name = userDto.name,
+            surname = userDto.surname,
+            title = userDto.title,
+            email = userDto.email,
+            phone = userDto.phone,
+            institution = institutionService.findById(userDto.institutionId!!),
+            password = passwordEncoder.encode(userDto.password),
+            role = userDto.role!!
         )
     }
 
-    fun toEntity(dto: UserDTO): User {
-        return User(
-            id = dto.id,
-            name = dto.name,
-            surname = dto.surname,
-            title = dto.title,
-            email = dto.email,
-            password = "", // Password should be managed separately (e.g., hashed and set during registration)
-            phone = dto.phone,
-            institution = dto.institution,
-            role = dto.role,
-            createdAt = dto.createdAt,
-            updatedAt = dto.updatedAt
-        )
-    }*/
+    fun toDto(){
+
+    }
 }

@@ -65,7 +65,7 @@ class RegistrationService(
         val user: User = userRepository.findById(userId)
             .orElseThrow { IllegalArgumentException("User not found") }
         val registration = registrationRepository.findByConferenceAndUser(conference, user)
-        println("\nregistration $registration\n")
+        //println("\nregistration $registration\n")
         if (registration != null) {
             return registration.active
         }

@@ -47,9 +47,9 @@
             </div>
 
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="author">Authors</label>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="author">Speaker</label>
                 <select id="author" name="authorId" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
-                    <option disabled>-- Select Authors --</option>
+                    <option disabled>-- Select Speaker --</option>
                     <option th:each="author : ${authors}"
                             th:value="${author.id}"
                             th:text="${author.title + '. ' + author.surname + ' ' + author.name}"></option>

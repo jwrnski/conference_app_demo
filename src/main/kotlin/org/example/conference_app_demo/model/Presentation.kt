@@ -21,9 +21,6 @@ class Presentation(
     @JoinColumn(name = "conference_id")
     var conference: Conference? = null,
 
-    //@ManyToMany(mappedBy = "presentations", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    //var topics: MutableList<Topic> = mutableListOf(),
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     var schedule: Schedule? = null,

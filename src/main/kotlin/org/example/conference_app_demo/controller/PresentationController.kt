@@ -1,10 +1,13 @@
 package org.example.conference_app_demo.controller
 
+import jakarta.validation.Valid
+import org.example.conference_app_demo.dto.PresentationDto
 import org.example.conference_app_demo.model.Presentation
 import org.example.conference_app_demo.service.*
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 
 @Controller
@@ -51,7 +54,32 @@ class PresentationController(
         } else {
             model.addAttribute("selectedSchedule", null)
         }
+        model.addAttribute("presentation", PresentationDto())
         return "presentation/create-presentation"
+    }
+
+    @PostMapping
+    fun createPresentation(@Valid @ModelAttribute presentationDto: PresentationDto,
+                           bindingResult: BindingResult,
+                           @RequestParam("conferenceId") conferenceId: Long,
+                           @RequestParam("submissionId") submissionId: Long,
+                           @RequestParam("authorId") authorId: Long,
+                           @RequestParam("scheduleId") scheduleId: Long,
+                           model: Model
+                            ): String {
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("conferenceId", conferenceId)
+            model.addAttribute("conferenceName", conferenceService.getNameById(conferenceId))
+            model.addAttribute("authors", userService.findAll())
+            model.addAttribute("presentation", presentationDto)
+            return "presentation/create-presentation"
+        }
+
+        val presentation = presentationService.toEntity(presentationDto)
+
+        presentationService.save(presentation)
+        return "redirect:/conferences/$conferenceId"
     }
 
     @GetMapping("/edit/{id}")
@@ -61,31 +89,6 @@ class PresentationController(
         val authors = userService.findAll();
         model.addAttribute("authors", authors)
         return "presentation/edit-presentation"
-    }
-
-    @PostMapping
-    fun createPresentation(@ModelAttribute presentation: Presentation,
-                           @RequestParam("conferenceId") conferenceId: Long,
-                           @RequestParam("submissionId") submissionId: Long,
-                           @RequestParam("authorId") authorId: Long,
-                           @RequestParam("scheduleId") scheduleId: Long
-                            ): String {
-        val conference = conferenceService.findById(conferenceId)
-        presentation.conference = conference
-
-        val submission = submissionService.findById(submissionId)
-        if (submission != null) {
-            presentation.submission = submission
-        }
-
-        val author = userService.findById(authorId)
-        presentation.speakers.add(author)
-
-        val schedule = scheduleService.findById(scheduleId)
-        presentation.schedule = schedule
-
-        presentationService.save(presentation)
-        return "redirect:/conferences/$conferenceId"
     }
 
     @DeleteMapping("/{id}")
