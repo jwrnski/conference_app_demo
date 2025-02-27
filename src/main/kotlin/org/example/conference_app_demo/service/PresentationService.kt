@@ -1,8 +1,10 @@
 package org.example.conference_app_demo.service
 
 import org.example.conference_app_demo.dto.PresentationDto
+import org.example.conference_app_demo.model.Conference
 import org.springframework.stereotype.Service
 import org.example.conference_app_demo.model.Presentation
+import org.example.conference_app_demo.model.Schedule
 import org.example.conference_app_demo.model.User
 import org.example.conference_app_demo.repository.PresentationRepository
 import java.time.LocalDateTime
@@ -11,7 +13,6 @@ import java.time.LocalDateTime
 class PresentationService(
     private val userService: UserService,
     private val presentationRepository: PresentationRepository,
-    private val scheduleService: ScheduleService
 ) {
 
     fun save(presentation: Presentation): Presentation {
@@ -42,21 +43,16 @@ class PresentationService(
         return presentationRepository.save(existingPresentation)
     }
 
-    fun toEntity(presentationDto: PresentationDto): Presentation {
+    fun toEntity(presentationDto: PresentationDto, schedule: Schedule, conference: Conference): Presentation {
         return Presentation(
+            conference = conference,
             title = presentationDto.title!!,
             description = presentationDto.description!!,
             startTime = presentationDto.startTime!!,
             endTime = presentationDto.endTime!!,
-            schedule = scheduleService.findById(presentationDto.scheduleId!!),
-            speakers = addToSpeakers(presentationDto.speakerId!!, presentationDto.id!!)
+            schedule = schedule,
+            speakers = mutableListOf()
         )
     }
 
-    fun addToSpeakers(speakerId: Long, presentationId: Long): MutableList<User> {
-        val presentation = findById(presentationId)
-        val user = userService.findById(speakerId)
-        presentation.speakers.add(user)
-        return presentationRepository.save(presentation).speakers
-    }
 }

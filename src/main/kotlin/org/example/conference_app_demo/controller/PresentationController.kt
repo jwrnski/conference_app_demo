@@ -42,8 +42,8 @@ class PresentationController(
         model.addAttribute("conferenceId", conferenceId);
         val conferenceName = conferenceService.getNameById(conferenceId)
         model.addAttribute("conferenceName", conferenceName)
-        val authors = userService.findAll();
-        model.addAttribute("authors", authors)
+        val speakers = userService.findAll();
+        model.addAttribute("speakers", speakers)
         val submissions = submissionService.getApprovedSubmissions()
         model.addAttribute("submissions", submissions)
         val schedules = scheduleService.findByConferenceId(conferenceId)
@@ -62,22 +62,26 @@ class PresentationController(
     fun createPresentation(@Valid @ModelAttribute presentationDto: PresentationDto,
                            bindingResult: BindingResult,
                            @RequestParam("conferenceId") conferenceId: Long,
-                           @RequestParam("submissionId") submissionId: Long,
-                           @RequestParam("authorId") authorId: Long,
-                           @RequestParam("scheduleId") scheduleId: Long,
                            model: Model
                             ): String {
 
         if(bindingResult.hasErrors()){
             model.addAttribute("conferenceId", conferenceId)
             model.addAttribute("conferenceName", conferenceService.getNameById(conferenceId))
-            model.addAttribute("authors", userService.findAll())
+            model.addAttribute("speakers", userService.findAll())
             model.addAttribute("presentation", presentationDto)
+            model.addAttribute("submissions", submissionService.getApprovedSubmissions())
+            model.addAttribute("schedules", scheduleService.findByConferenceId(conferenceId))
+            //model.addAttribute("speakerId", presentationDto.speakerId)
             return "presentation/create-presentation"
         }
 
-        val presentation = presentationService.toEntity(presentationDto)
-
+        val speakerId = presentationDto.speakerId!!
+        val scheduleId = presentationDto.scheduleId!!
+        val conference = conferenceService.findById(conferenceId)
+        val schedule = scheduleService.findById(scheduleId)
+        val presentation = presentationService.toEntity(presentationDto, schedule, conference)
+        presentation.speakers.add(userService.findById(speakerId))
         presentationService.save(presentation)
         return "redirect:/conferences/$conferenceId"
     }

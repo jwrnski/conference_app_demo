@@ -6,8 +6,7 @@ import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class ScheduleService(  private val presentationService: PresentationService,
-                        private val scheduleRepository: ScheduleRepository) {
+class ScheduleService(private val scheduleRepository: ScheduleRepository) {
 
 
     fun save(schedule: Schedule): Schedule {

@@ -8,8 +8,10 @@
     <div class="container mx-auto p-6">
         <h1 class="text-2xl font-bold mb-4">Create a presentation for</h1>
         <h1 class="text-2xl font-bold mb-4"> <span th:text="${conferenceName}"></span></h1>
-        <form th:action="@{/presentations}" method="post" class="bg-white p-6 rounded shadow-sm">
+
+        <form th:action="@{/presentations}" th:object="${presentation}" method="post" class="bg-white p-6 rounded shadow-sm">
             <input type="hidden" name="conferenceId" th:value="${conferenceId}" />
+
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
                     Title
@@ -20,7 +22,9 @@
                         name="title"
                         type="text"
                         placeholder="Presentation Title"
+                        th:field="*{title}"
                         required>
+                <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color:red; font-style: italic"></p>
             </div>
 
             <div class="mb-4">
@@ -33,38 +37,44 @@
                         name="description"
                         placeholder="Conference Description"
                         rows="3"
+                        th:field="*{description}"
                         required></textarea>
+                <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color:red; font-style: italic"></p>
             </div>
 
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="submission">Submission</label>
                 <select id="submission" name="submissionId" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
-                    <option disabled>-- Select Submission --</option>
+                    <option disabled selected hidden value="">-- Select Submission --</option>
                     <option th:each="submission : ${submissions}"
                             th:value="${submission.id}"
-                            th:text="${submission.paperTitle}"></option>
+                            th:text="${submission.paperTitle}"
+                    ></option>
                 </select>
+                <p th:if="${#fields.hasErrors('submissionId')}" th:errors="*{submissionId}" style="color:red; font-style: italic"></p>
             </div>
 
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="author">Speaker</label>
-                <select id="author" name="authorId" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
-                    <option disabled>-- Select Speaker --</option>
-                    <option th:each="author : ${authors}"
-                            th:value="${author.id}"
-                            th:text="${author.title + '. ' + author.surname + ' ' + author.name}"></option>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="speaker">Speaker</label>
+                <select id="speaker" name="speakerId" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
+                    <option disabled selected hidden value="">-- Select Speaker --</option>
+                    <option th:each="speaker : ${speakers}"
+                            th:value="${speaker.id}"
+                            th:text="${speaker.title + '. ' + speaker.surname + ' ' + speaker.name}"></option>
                 </select>
+                <p th:if="${#fields.hasErrors('speakerId')}" th:errors="*{speakerId}" style="color:red; font-style: italic"></p>
             </div>
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="schedule">Day</label>
                 <select id="schedule" name="scheduleId" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline" required>
-                    <option disabled>-- Select Date --</option>
+                    <option disabled selected hidden value="">-- Select Date --</option>
                     <option th:each="schedule : ${schedules}"
                             th:value="${schedule.id}"
                             th:text="${schedule.startDate}"
                             th:selected="${selectedSchedule?.id == schedule.id}"
                     ></option>
                 </select>
+                <p th:if="${#fields.hasErrors('scheduleId')}" th:errors="*{scheduleId}" style="color:red; font-style: italic"></p>
             </div>
 
             <div class="mb-4">
@@ -76,7 +86,9 @@
                         id="startTime"
                         name="startTime"
                         type="time"
+                        th:field="*{startTime}"
                         required>
+                <p th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}" style="color:red; font-style: italic"></p>
             </div>
 
             <div class="mb-4">
@@ -88,12 +100,13 @@
                         id="endTime"
                         name="endTime"
                         type="time"
+                        th:field="*{endTime}"
                         required>
+                <p th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}" style="color:red; font-style: italic"></p>
             </div>
 
             <button style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;"
-                    type="submit"
-            >
+                    type="submit">
                 Create Presentation
             </button>
         </form>
