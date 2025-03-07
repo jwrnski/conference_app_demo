@@ -6,65 +6,70 @@
 
 <main class="flex-grow">
   <div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4" th:text="${submission.conference.name}">Conference Name</h1>
-    <p>
-      Paper title: <span th:text="${submission.paperTitle}"></span>
-    </p>
-    <p>
-      Abstract: <span th:text="${submission.abstract}"></span>
-    </p>
+    <h1 class="text-3xl font-bold mb-6" th:text="${submission.conference.name}">Conference Name</h1>
 
-    <p>
-      Authors:
-    <ul>
-      <li th:each="author : ${submission.authors}">
-        <span th:text="${author.title}"></span>
-        <span th:text="${author.name}"></span>
-        <span th:text="${author.surname}"></span>
-      </li>
-    </ul>
+    <div class="grid grid-cols-[150px_1fr] gap-y-4 text-lg mb-8">
+      <div class="text-gray-600">Paper Title:</div>
+      <div class="font-bold" th:text="${submission.paperTitle}">Research Paper Title</div>
+
+      <div class="text-gray-600">Status:</div>
+      <div class="font-bold" th:text="${submission.status}">PENDING</div>
+
+      <div class="text-gray-600 self-start">Abstract:</div>
+      <div class="font-bold" th:text="${submission.abstract}">Paper abstract text here...</div>
+
+      <div class="text-gray-600 self-start">Comments:</div>
+      <div class="font-bold" th:text="${submission.comments ?: 'No comments'}">Reviewer comments here...</div>
+
+      <div class="text-gray-600 self-start">Authors:</div>
+      <div class="font-bold" >
+        <ul>
+          <li th:each="author : ${submission.authors}">
+            <span th:text="${author.title}"></span>
+            <span th:text="${author.name}"></span>
+            <span th:text="${author.surname}"></span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="text-gray-600 self-start">Topics:</div>
+      <div class="font-bold">
+        <ul>
+          <li th:each="topic : ${submission.topics}">
+            <span th:text="${topic.name}"></span>
+          </li>
+        </ul>
+
+      </div>
+    </div>
 
 
-    <p>
-      Topic:
-      <ul>
-        <li th:each="topic : ${submission.topics}">
-          <span th:text="${topic.name}"></span>
-        </li>
-      </ul>
 
-    <p>
-      Status: <span th:text="${submission.status}"></span>
-    </p>
-    <p>
-      Comments: <span th:text="${submission.comments}"></span>
-    </p>
-    <a href="/submissions" class="text-blue-500 hover:underline mt-10">Back to all submissions</a>
 
-    <div class="mt-10 flex space-x-4">
-      <form th:action="@{/submissions}"
-            method="post">
+    <!-- Actions section -->
+    <div class="mt-10 flex flex-wrap items-center gap-4">
+      <a href="/submissions" class="inline-block bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition-colors">
+        Back to all submissions
+      </a>
+
+      <form th:action="@{/submissions}" method="post" class="inline-block m-0 p-0">
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="status" value="APPROVED">
         <input type="hidden" name="submissionId" th:value="${submission.id}">
-        <button type="submit"
-                style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
+        <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors">
           Approve
         </button>
       </form>
 
-      <form th:action="@{/submissions}"
-            method="post">
+      <form th:action="@{/submissions}" method="post" class="inline-block m-0 p-0">
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="status" value="REJECTED">
         <input type="hidden" name="submissionId" th:value="${submission.id}">
-        <button type="submit"
-                style="background-color: red; color: white; padding: 7px; border-radius: 5px;">
+        <button type="submit" class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors">
           Reject
         </button>
       </form>
     </div>
-
   </div>
 </main>
 

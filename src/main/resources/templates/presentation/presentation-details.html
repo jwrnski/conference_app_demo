@@ -6,51 +6,68 @@
 
 <main class="flex-grow">
     <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-4" th:text="${presentation.title}">Presentation Title</h1>
-        <p>
-            Description: <span th:text="${presentation.description}"></span>
-        </p>
-        <p>
-            Start Time: <span th:text="${presentation.startTime}"></span>
-        </p>
-        <p>
-            End Time: <span th:text="${presentation.endTime}"></span>
-        </p>
-        <p>
-            Conference: <span th:text="${presentation.conference.name}"></span>
-        </p>
-        <p>Speakers:</p>
-        <ul>
-            <li th:each="author : ${presentation.speakers}"
-                class="hover:text-yellow-600 transition-colors duration-200 hover:underline">
-                <a th:href="@{/users/{id}(id=${author.id})}"
-                   hx-target="#main-content"
-                   hx-swap="innerHTML"
-                >
-                    <span th:text="${author.title}"></span>
-                    <span th:text="${author.name}"></span>
-                    <span th:text="${author.surname}"></span>
-                </a>
-            </li>
-        </ul>
-        <a href="/conferences" class="text-blue-500 hover:underline mt-10">Back to all presentations</a>
+        <h1 class="text-3xl font-bold mb-6" th:text="${presentation.title}">Presentation Title</h1>
 
-        <div class="mt-10 flex space-x-4">
-            <a th:href="@{/conferences/edit/{id}(id=${presentation.id})}"
-               style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;">
-                Edit
-            </a>
+        <div class="grid grid-cols-[150px_1fr] gap-y-4 text-lg mb-8">
+            <div class="text-gray-600">Description:</div>
+            <div class="font-bold" th:text="${presentation.description}">Description text here</div>
 
-            <form th:action="@{/conferences/{id}(id=${presentation.id})}" method="post"
-                  onsubmit="return confirm('Are you sure you want to delete this presentation?');">
-                <input type="hidden" name="_method" value="delete"/>
-                <button type="submit"
-                        style="background-color: red; color: white; padding: 7px; border-radius: 5px;">
-                    Delete
-                </button>
-            </form>
+            <div class="text-gray-600">Start Time:</div>
+            <div class="font-bold" th:text="${presentation.startTime}">10:00 AM</div>
+
+            <div class="text-gray-600">End Time:</div>
+            <div class="font-bold" th:text="${presentation.endTime}">11:00 AM</div>
+
+            <div class="text-gray-600">Conference:</div>
+            <div class="font-bold" th:text="${presentation.conference.name}">Conference name</div>
+
+            <div class="text-gray-600 self-start">Speakers:</div>
+            <div class="font-bold">
+                <ul>
+                    <li th:each="author : ${presentation.speakers}" class="hover:text-yellow-600 transition-colors duration-200">
+                        <a th:href="@{/users/{id}(id=${author.id})}"
+                           hx-target="#main-content"
+                           hx-swap="innerHTML"
+                           class="hover:underline">
+                            <span th:text="${author.title}"></span>
+                            <span th:text="${author.name}"></span>
+                            <span th:text="${author.surname}"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
 
+        <!-- Actions section -->
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+            <a href="/conferences"
+               hx-target="#main-content"
+               hx-swap="innerHTML"
+               class="inline-block bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition-colors">
+                Back to all presentations
+            </a>
+
+            <!-- Admin/Organizer Actions -->
+            <div th:if="${#authentication != null && (#authentication.authorities.![authority].contains('ROLE_Organizer') || #authentication.authorities.![authority].contains('ROLE_ADMIN'))}"
+                 class="inline-flex gap-4">
+                <a th:href="@{/presentations/edit/{id}(id=${presentation.id})}"
+                   hx-target="#main-content"
+                   hx-swap="innerHTML"
+                   class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
+                    Edit
+                </a>
+
+                <form th:action="@{/presentations/{id}(id=${presentation.id})}" method="post"
+                      onsubmit="return confirm('Are you sure you want to delete this presentation?');"
+                      class="inline-block m-0 p-0">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit"
+                            class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </main>
 

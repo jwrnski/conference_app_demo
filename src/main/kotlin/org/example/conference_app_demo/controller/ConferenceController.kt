@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*
 class ConferenceController(
     private val conferenceService: ConferenceService,
     private val registrationService: RegistrationService,
-    private val registrationRepository: RegistrationRepository,
     private val userService: UserService
 ) {
 
@@ -100,17 +99,22 @@ class ConferenceController(
         model.addAttribute("day", day)
         model.addAttribute("month", month)
 
-        val authenticatedUser = SecurityContextHolder.getContext().authentication
-        val principal = authenticatedUser.principal
-        if (principal is CustomUserDetails) {
-            val userId = principal.getId()
-            model.addAttribute("userId", userId)
-            val isRegistered = registrationService.isUserRegistered(conference.id, userId)
-            model.addAttribute("isRegistered", isRegistered)
+        var userId: Long? = null
+        var isRegistered = false
+
+        val authentication = SecurityContextHolder.getContext().authentication
+        if (authentication != null && authentication.isAuthenticated &&
+            authentication.principal is CustomUserDetails) {
+            val principal = authentication.principal as CustomUserDetails
+            userId = principal.getId()
+            isRegistered = registrationService.isUserRegistered(conference.id, userId)
         }
 
-        val schedules = conference.schedules
 
+        model.addAttribute("userId", userId)
+        model.addAttribute("isRegistered", isRegistered)
+
+        val schedules = conference.schedules
         model.addAttribute("schedules", schedules)
 
         return "conference/conference-details"

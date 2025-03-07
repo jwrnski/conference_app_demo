@@ -24,6 +24,14 @@ class UserController(private val userService: UserService) {
         return ResponseEntity.ok(users)
     }
 
+    @GetMapping("/my-account")
+    fun myAccountPage(model: Model): String {
+        val userId = userService.getLoggedInUserId()
+        val user = userService.findById(userId)
+        model.addAttribute("user", user)
+        return "user/my-account"
+    }
+
     @GetMapping("/{id}")
     fun getUserById(@PathVariable id: Long, model: Model): String {
         val user = userService.findById(id)

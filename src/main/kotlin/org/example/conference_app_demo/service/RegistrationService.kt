@@ -59,17 +59,20 @@ class RegistrationService(
         registrationRepository.save(registration)
     }
 
-    fun isUserRegistered(conferenceId: Long, userId: Long): Boolean {
-        val conference: Conference = conferenceRepository.findById(conferenceId)
-            .orElseThrow { IllegalArgumentException("Conference not found") }
-        val user: User = userRepository.findById(userId)
-            .orElseThrow { IllegalArgumentException("User not found") }
-        val registration = registrationRepository.findByConferenceAndUser(conference, user)
-        //println("\nregistration $registration\n")
-        if (registration != null) {
-            return registration.active
+    fun isUserRegistered(conferenceId: Long, userId: Long?): Boolean {
+        if (userId == null) return false
+
+        try {
+            val conference: Conference = conferenceRepository.findById(conferenceId)
+                .orElseThrow { IllegalArgumentException("Conference not found") }
+            val user: User = userRepository.findById(userId)
+                .orElseThrow { IllegalArgumentException("User not found") }
+            val registration = registrationRepository.findByConferenceAndUser(conference, user)
+            return registration?.active ?: false
+        } catch (e: Exception) {
+            // Log the exception
+            return false
         }
-        return false
     }
 
 }

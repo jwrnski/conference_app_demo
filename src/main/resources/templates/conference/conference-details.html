@@ -6,42 +6,44 @@
 
 <main class="flex-grow">
     <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-4" th:text="${conference.name}">Conference Name</h1>
-        <p>
-            Description: <span th:text="${conference.description}"></span>
-        </p>
-        <p>
-            Start Date: <span th:text="${conference.startDate} + ' (' + ${conference.startDate.dayOfWeek.toString()} + ')'"></span>
-        </p>
-        <p>
-            End Date: <span th:text="${conference.endDate} + ' (' + ${conference.endDate.dayOfWeek.toString()} + ')'"></span>
-        </p>
-        <p>
-            City: <span th:text="${conference.city}"></span>
-        </p>
-        <p>
-            Category: <span th:text="${conference.category}"></span>
-        </p>
+        <div class="container mx-auto p-6">
+            <h1 class="text-3xl font-bold mb-6" th:text="${conference.name}">Conference Name</h1>
 
-        <table class="min-w-full divide-y divide-gray-300 bg-white border rounded-lg shadow-sm">
-            <thead class="bg-gray-200">
+            <div class="grid grid-cols-[150px_1fr] gap-y-4 text-lg">
+                <div class="text-gray-600">Description:</div>
+                <div class="font-bold" th:text="${conference.description}">Conference description</div>
+
+                <div class="text-gray-600">Start Date:</div>
+                <div class="font-bold" th:text="${conference.startDate} + ' (' + ${conference.startDate.dayOfWeek.toString()} + ')'">Start Date</div>
+
+                <div class="text-gray-600">End Date:</div>
+                <div class="font-bold" th:text="${conference.endDate} + ' (' + ${conference.endDate.dayOfWeek.toString()} + ')'">End Date</div>
+
+                <div class="text-gray-600">City:</div>
+                <div class="font-bold" th:text="${conference.city}">City</div>
+
+                <div class="text-gray-600">Category:</div>
+                <div class="font-bold" th:text="${conference.category}">Category</div>
+            </div>
+        </div>
+        <table class="min-w-full divide-y divide-gray-300 bg-white border rounded-lg shadow-sm mt-4">
+            <thead class="bg-gray-300">
             <tr>
                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 uppercase">Day</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 uppercase">Presentations</th>
             </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200">
+            <tbody class="divide-x divide-gray-400 divide-y">
             <!-- Iterate through the conference schedules -->
             <tr th:each="schedule : ${schedules}">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" th:text="${schedule.startDate}"></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-700" th:text="${schedule.startDate}"></td>
                 <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">
-                    <ul class="space-y-2">
-
+                    <ul class="space-y-2 border-1 border-gray-400 rounded-lg">
                         <li th:each="presentation : ${schedule.presentations}" class="p-3 bg-gray-50 rounded shadow">
                             <a th:href="@{/presentations/{id}(id=${presentation.id})}">
                                 <div class="font-bold text-gray-800" th:text="${presentation.title}" ></div>
-                                <div class="text-sm text-gray-500 italic" th:text="${presentation.startTime} + ' - ' + ${presentation.endTime}"></div>
-                                <div class="text-sm text-gray-700">
+                                <div class="text-sm text-gray-700 italic" th:text="${presentation.startTime} + ' - ' + ${presentation.endTime}"></div>
+                                <div class="text-sm text-gray-500">
                                     Speakers:
                                     <span th:each="speaker, iterStat : ${presentation.speakers}">
                                         <span th:text="${speaker.title} + ' ' + ${speaker.name} + ' ' + ${speaker.surname}"></span>
@@ -51,10 +53,12 @@
                             </a>
                         </li>
                     </ul>
-                    <a th:href="@{/presentations/create-presentation(conferenceId=${conference.id}, scheduleId=${schedule.id})}"
-                       style="background-color: lightblue; color: white; padding: 5px; border-radius: 3px;">
+                    <a  th:href="@{/presentations/create-presentation(conferenceId=${conference.id}, scheduleId=${schedule.id})}"
+                        th:if="${#authorization.expression('hasRole(''Organizer'') or hasRole(''ADMIN'')')}"
+                        class="btn bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors">
                         Add presentation
                     </a>
+
                 </td>
             </tr>
             </tbody>
@@ -63,64 +67,65 @@
         <a href="/conferences" class="text-blue-500 hover:underline mt-10">Back to all conferences</a>
 
 
-        <div class="mt-10 flex space-x-4">
+        <div class="mt-10 flex flex-wrap items-center gap-4">
             <!-- Edit Button -->
             <a th:href="@{/conferences/edit/{id}(id=${conference.id})}"
-               style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;">
+                class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
                 Edit
             </a>
 
-            <!-- Delete Button -->
+            <!-- Delete Button style="background-color: red; color: white; padding: 7px; border-radius: 5px;"-->
             <form th:action="@{/conferences/{id}(id=${conference.id})}" method="post"
                   onsubmit="return confirm('Are you sure you want to delete this conference?');">
                 <input type="hidden" name="_method" value="delete"/>
                 <button type="submit"
-                        style="background-color: red; color: white; padding: 7px; border-radius: 5px;">
+                        class="btn bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors">
                     Delete
                 </button>
             </form>
-            <a th:href="@{/presentations/create-presentation(conferenceId=${conference.id})}"
-               style="background-color: darkorange; color: white; padding: 7px; border-radius: 5px;">
+            <!--<a th:href="@{/presentations/create-presentation(conferenceId=${conference.id})}"
+               class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
                 Create Presentation
-            </a>
+            </a>-->
             <a th:href="@{/submissions/submission-form(conferenceId=${conference.id})}"
-               style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
+               class="btn bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors">
                 Submit Paper
             </a>
 
             <a th:href="@{/submissions}"
-               style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
+               class="btn bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors">
                 Check submissions
             </a>
 
-            <form th:action="@{/registrations}" method="post" th:if="${!isRegistered}">
-                <input type="hidden" name="conferenceId" th:value="${conference.id}" />
-                <input type="hidden" name="userId" th:value="${userId}" />
-                <button type="submit"
-                        style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
+                <!-- For authenticated users -->
+                <div th:if="${userId != null}">
+                    <!-- Show Register button if not registered -->
+                    <form th:if="${!isRegistered}" th:action="@{/registrations}" method="post">
+                        <input type="hidden" name="conferenceId" th:value="${conference.id}" />
+                        <input type="hidden" name="userId" th:value="${userId}" />
+                        <button type="submit" class="btn bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors">
+                            Register
+                        </button>
+                    </form>
+
+                    <!-- Show Unregister button if registered -->
+                    <form th:if="${isRegistered}" th:action="@{/registrations}" method="post">
+                        <input type="hidden" name="_method" value="put"/>
+                        <input type="hidden" name="conferenceId" th:value="${conference.id}" />
+                        <input type="hidden" name="userId" th:value="${userId}" />
+                        <button type="submit" class="btn bg-orange-600 text-white py-2 px-4 rounded hover:bg-orange-700 transition-colors">
+                            Unregister
+                        </button>
+                    </form>
+                </div>
+
+                <!-- For unauthenticated users - link directly to the login page -->
+                <a th:if="${userId == null}"
+                   th:href="@{/auth/login}"
+                   class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors">
                     Register
-                </button>
-            </form>
+                </a>
 
-            <form th:action="@{/registrations}" method="post" th:if="${isRegistered}">
-                <input type="hidden" name="_method" value="put"/>
-                <input type="hidden" name="conferenceId" th:value="${conference.id}" />
-                <input type="hidden" name="userId" th:value="${userId}" />
-                <button type="submit"
-                        style="background-color: red; color: white; padding: 7px; border-radius: 5px;">
-                    Unregister
-                </button>
-            </form>
-
-            <!--<form th:action="@{/registrations}" method="post">
-                <input type="hidden" name="conferenceId" th:value="${conference.id}" />
-                <input type="hidden" name="userId" th:value="${#authentication.principal.id}" />
-                <button type="submit"
-                        style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
-                    Register
-                </button>
-
-            </form>-->
         </div>
 
     </div>
