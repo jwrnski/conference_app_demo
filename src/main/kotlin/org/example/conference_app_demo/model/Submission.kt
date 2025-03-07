@@ -35,6 +35,7 @@ class Submission(
     var topics: MutableList<Topic> = mutableListOf(),
 
     var status: SubmissionStatus = SubmissionStatus.PENDING,
+
     var comments: String? = null,
 
     @Column(nullable = false, updatable = false)

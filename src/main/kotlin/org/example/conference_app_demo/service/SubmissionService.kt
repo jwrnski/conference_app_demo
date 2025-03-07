@@ -34,17 +34,24 @@ class SubmissionService(
         submissionRepository.deleteById(id)
     }
 
-    fun updateStatus(id: Long, status: SubmissionStatus){
+    fun updateStatus(id: Long, status: SubmissionStatus, comments: String?){
         val submission = submissionRepository.findById(id)
             .orElseThrow { RuntimeException("Submission not found with id $id") }
 
         submission.status = status
-        if(status == SubmissionStatus.APPROVED)
-            submission.comments = "This submission has been approved"
-        else if(status == SubmissionStatus.REJECTED)
-            submission.comments = "This submission has been rejected"
-        submissionRepository.save(submission)
 
+        // Use provided comments if not null or empty, otherwise use default
+        submission.comments = if (!comments.isNullOrBlank()) {
+            comments
+        } else if(status == SubmissionStatus.APPROVED) {
+            "This submission has been approved"
+        } else if(status == SubmissionStatus.REJECTED) {
+            "This submission has been rejected"
+        } else {
+            submission.comments // Keep existing comments for other statuses
+        }
+
+        submissionRepository.save(submission)
     }
 
     fun getSubmissionsByConferences(conferences: List<Conference>): List<Submission> {

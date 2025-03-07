@@ -101,8 +101,9 @@ class SubmissionController(
 
     @PutMapping()
     fun updateStatus(@RequestParam submissionId: Long,
-                     @RequestParam status: SubmissionStatus): String {
-        submissionService.updateStatus(submissionId, status)
+                     @RequestParam status: SubmissionStatus,
+                     @RequestParam(required = false) comments: String?): String {
+        submissionService.updateStatus(submissionId, status, comments)
         return "redirect:/submissions/$submissionId"
     }
 

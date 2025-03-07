@@ -6,7 +6,7 @@
 
 <main class="flex-grow">
     <div class="container mx-auto p-6">
-        <div class="container mx-auto p-6">
+        <div class="container mx-auto p-3">
             <h1 class="text-3xl font-bold mb-6" th:text="${conference.name}">Conference Name</h1>
 
             <div class="grid grid-cols-[150px_1fr] gap-y-4 text-lg">
@@ -26,6 +26,7 @@
                 <div class="font-bold" th:text="${conference.category}">Category</div>
             </div>
         </div>
+        <div class="text-lg">Conference Schedule</div>
         <table class="min-w-full divide-y divide-gray-300 bg-white border rounded-lg shadow-sm mt-4">
             <thead class="bg-gray-300">
             <tr>

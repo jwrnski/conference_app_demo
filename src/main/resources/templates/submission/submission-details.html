@@ -19,7 +19,7 @@
       <div class="font-bold" th:text="${submission.abstract}">Paper abstract text here...</div>
 
       <div class="text-gray-600 self-start">Comments:</div>
-      <div class="font-bold" th:text="${submission.comments ?: 'No comments'}">Reviewer comments here...</div>
+      <div class="font-bold" th:text="${submission.comments}">Reviewer comments here...</div>
 
       <div class="text-gray-600 self-start">Authors:</div>
       <div class="font-bold" >
@@ -41,12 +41,59 @@
         </ul>
 
       </div>
+
+      <div class="text-gray-600 self-start">Submitted Paper:</div>
+      <div class="font-bold" th:text="${submission.filePath}">Paper File</div>
+    </div>
+
+    <!-- Single form with buttons for both actions -->
+    <form th:action="@{/submissions}" method="post">
+      <input type="hidden" name="_method" value="PUT">
+      <input type="hidden" name="submissionId" th:value="${submission.id}">
+
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="comments">
+          Leave a comment for this submission.
+        </label>
+        <textarea
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="comments"
+                name="comments"
+                placeholder="This submission has been rejected because of ..."
+                rows="3"
+        ></textarea>
+      </div>
+
+      <div class="mt-10 flex flex-wrap items-center gap-4">
+        <a href="/submissions" class="inline-block bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition-colors">
+          Back to all submissions
+        </a>
+
+        <button type="submit" name="status" value="APPROVED" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors">
+          Approve
+        </button>
+
+        <button type="submit" name="status" value="REJECTED" class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors">
+          Reject
+        </button>
+      </div>
+    </form>
+
+    <!--<div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="comments">
+        Comments
+      </label>
+      <textarea
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="comments"
+              name="comments"
+              placeholder="Status comments."
+              rows="3"
+              th:text="${submission.comments}"
+              ></textarea>
     </div>
 
 
-
-
-    <!-- Actions section -->
     <div class="mt-10 flex flex-wrap items-center gap-4">
       <a href="/submissions" class="inline-block bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition-colors">
         Back to all submissions
@@ -56,6 +103,7 @@
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="status" value="APPROVED">
         <input type="hidden" name="submissionId" th:value="${submission.id}">
+        <input type="hidden" name="comments" th:value="${submission.comments}">
         <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors">
           Approve
         </button>
@@ -65,11 +113,12 @@
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="status" value="REJECTED">
         <input type="hidden" name="submissionId" th:value="${submission.id}">
+        <input type="hidden" name="comments" th:value="${submission.comments}">
         <button type="submit" class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors">
           Reject
         </button>
       </form>
-    </div>
+    </div>-->
   </div>
 </main>
 
