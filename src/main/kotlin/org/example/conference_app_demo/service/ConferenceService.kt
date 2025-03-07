@@ -12,6 +12,10 @@ import java.time.LocalDateTime
 class ConferenceService(private val conferenceRepository: ConferenceRepository,
     private val scheduleService: ScheduleService) {
 
+    fun getConferenceByOrganizer(organizerId: Long): List<Conference>{
+        return conferenceRepository.findByOrganizerId(organizerId)
+    }
+
     fun save(conference: Conference): Conference {
         if (conference.startDate.isAfter(conference.endDate)) {
             throw IllegalArgumentException("Start date must be before end date")

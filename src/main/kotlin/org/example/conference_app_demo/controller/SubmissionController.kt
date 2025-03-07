@@ -28,8 +28,12 @@ class SubmissionController(
 
     @GetMapping
     fun getAllSubmissions(model: Model): String {
-        val submissions = submissionService.findAll()
+        val loggedInUserId = userService.getLoggedInUserId()
+        val conferences = conferenceService.getConferenceByOrganizer(loggedInUserId)
+        val submissions = submissionService.getSubmissionsByConferences(conferences)
         model.addAttribute("submissions", submissions)
+        model.addAttribute("conferences", conferences)
+
         return "submission/submissions"
     }
 

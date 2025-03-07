@@ -5,21 +5,30 @@
 <div th:replace="~{fragments/nav :: nav}"></div>
 <main class="flex-grow">
     <div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4 ">All Conferences</h1>
-        <ul class="space-y-4">
-            <li th:each="conference : ${conferences}">
-                <a
-                        th:href="@{/conferences/{id}(id=${conference.id})}"
+        <h1 class="text-2xl font-bold mb-6 text-red-500">All Conferences</h1>
+        <ul class="space-y-6 border-3 border-slate-900">
+            <li th:each="conference : ${conferences}"
+                class="border-3 border-slate-900 rounded-lg shadow hover:shadow-lg transition-shadow duration-200">
+                <a      th:href="@{/conferences/{id}(id=${conference.id})}"
                         hx-target="#main-content"
                         hx-swap="innerHTML"
-                        class="block border border-gray-300 rounded-lg p-4 hover:border-yellow-600 transition-colors duration-200 space-y-2"
-                >
-                    <div class="flex flex-col space-y-2">
-                        <p class="font-bold text-lg" th:text="${conference.name}">Conference Name</p>
-                        <p class="text-gray-500 text-sm" th:text="${conference.description}">Description</p>
-                        <p class="text-gray-500 text-sm" th:text="${conference.startDate}">Start Date</p>
-                        <p class="text-gray-500 text-sm" th:text="${conference.endDate}">End Date</p>
-                    </div>
+                        class="block p-6 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
+
+                    <span class="font-semibold text-lg size-6 text-gray-900" th:text="${conference.name}">Conference Name</span>
+                    <br />
+                    <span class="text-gray-500" th:text="${conference.description}">Conference Description</span>
+                    <br />
+                    <span class="text-gray-500" th:text="${conference.category}">Conference Category</span>
+                    <br />
+                    <span class="text-gray-500">
+                        Start Date:
+                        <span th:text="${conference.startDate}">Start Date</span>
+                    </span>
+                    <br />
+                    <span class="text-gray-500">
+                        End Date:
+                        <span th:text="${conference.endDate}">End Date</span>
+                    </span>
                 </a>
             </li>
         </ul>

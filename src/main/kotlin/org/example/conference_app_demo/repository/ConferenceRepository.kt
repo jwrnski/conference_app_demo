@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ConferenceRepository : JpaRepository<Conference, Long> {
     fun existsByName(name: String): Boolean
+    fun findByOrganizerId(organizerId: Long): List<Conference>
 }

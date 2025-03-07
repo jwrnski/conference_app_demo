@@ -3,26 +3,55 @@
 <div th:replace="~{fragments/header :: header}"></div>
 <body class="flex flex-col min-h-screen">
 <div th:replace="~{fragments/nav :: nav}"></div>
+
 <main class="flex-grow">
     <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-4">All Submissions</h1>
-        <ul >
-            <li th:each="submission : ${submissions}"
-                class="hover:text-yellow-600 transition-colors duration-200 hover:underline">
-                <a th:href="@{/submissions/{id}(id=${submission.id})}"
-                   hx-target="#main-content"
-                   hx-swap="innerHTML"
-                >
-                    <span th:text="${submission.paperTitle}">Paper Title</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div class="container mx-auto p-6 font-bold mb-4" >
-        <a href="/submissions/submission-form" style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
-            Submit Paper</a>
+        <h1 class="text-2xl font-bold mb-6">My Submissions</h1>
+
+        <!-- Display Submissions Grouped by Conference -->
+        <div th:each="conference : ${conferences}" class="mb-12">
+            <!-- Conference Name -->
+            <h2 class="text-xl font-bold mb-6" th:text="${conference.name}"></h2>
+
+            <!-- Submissions for this Conference -->
+            <ul class="space-y-6">
+                <li th:each="submission : ${submissions}"
+                    th:if="${submission.conference.id} == ${conference.id}"
+                    class="rounded-lg shadow hover:shadow-lg transition-shadow duration-200">
+                    <!-- Entire Submission Line as a Link -->
+                    <a th:href="@{/submissions/{id}(id=${submission.id})}"
+                       class="block p-6 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200">
+                        <!-- Submission Title -->
+                        <span class="font-semibold text-lg text-gray-900" th:text="${submission.paperTitle}"></span>
+                        <br />
+                        <!-- Topics -->
+                        <span class="italic text-gray-700">
+                            Topics:
+                            <span th:each="topic, iter : ${submission.topics}">
+                                <span th:text="${topic.name}"></span><span th:if="!${iter.last}">, </span>
+                            </span>
+                        </span>
+                        <br />
+                        <!-- Authors -->
+                        <span class="text-gray-700">
+                            Authors:
+                            <span th:each="author, iter : ${submission.authors}">
+                                <span th:text="${author.name} + ' ' + ${author.surname}"></span>
+                                <span th:if="!${iter.last}">, </span>
+                            </span>
+                        </span >
+                        <br />
+                        <span class="text-gray-700">
+                            Status:
+                            <span th:text="${submission.status}"></span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </main>
-</body>
+
 <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
 </html>

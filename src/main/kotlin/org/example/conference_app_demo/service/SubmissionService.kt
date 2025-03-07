@@ -1,10 +1,7 @@
 package org.example.conference_app_demo.service
 
 import org.example.conference_app_demo.dto.SubmissionDto
-import org.example.conference_app_demo.model.Submission
-import org.example.conference_app_demo.model.SubmissionStatus
-import org.example.conference_app_demo.model.Topic
-import org.example.conference_app_demo.model.User
+import org.example.conference_app_demo.model.*
 import org.example.conference_app_demo.repository.SubmissionRepository
 import org.example.conference_app_demo.repository.TopicRepository
 import org.example.conference_app_demo.repository.UserRepository
@@ -48,6 +45,11 @@ class SubmissionService(
             submission.comments = "This submission has been rejected"
         submissionRepository.save(submission)
 
+    }
+
+    fun getSubmissionsByConferences(conferences: List<Conference>): List<Submission> {
+        val conferenceIds = conferences.map { it.id }
+        return submissionRepository.findByConferenceIds(conferenceIds)
     }
 
     fun getApprovedSubmissions(): List<Submission> {

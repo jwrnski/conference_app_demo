@@ -11,10 +11,10 @@
             Description: <span th:text="${conference.description}"></span>
         </p>
         <p>
-            Start Date: <span th:text="${conference.startDate} + '(' + ${conference.startDate.dayOfWeek} + ')'"></span>
+            Start Date: <span th:text="${conference.startDate} + ' (' + ${conference.startDate.dayOfWeek.toString()} + ')'"></span>
         </p>
         <p>
-            End Date: <span th:text="${conference.endDate} + '(' + ${conference.endDate.dayOfWeek} + ')'"></span>
+            End Date: <span th:text="${conference.endDate} + ' (' + ${conference.endDate.dayOfWeek.toString()} + ')'"></span>
         </p>
         <p>
             City: <span th:text="${conference.city}"></span>
@@ -39,15 +39,15 @@
 
                         <li th:each="presentation : ${schedule.presentations}" class="p-3 bg-gray-50 rounded shadow">
                             <a th:href="@{/presentations/{id}(id=${presentation.id})}">
-                            <div class="font-bold text-gray-800" th:text="${presentation.title}" ></div>
-                            <div class="text-sm text-gray-500 italic" th:text="${presentation.startTime} + ' - ' + ${presentation.endTime}"></div>
-                            <div class="text-sm text-gray-700">
-                                Speakers:
-                                <span th:each="speaker, iterStat : ${presentation.speakers}">
+                                <div class="font-bold text-gray-800" th:text="${presentation.title}" ></div>
+                                <div class="text-sm text-gray-500 italic" th:text="${presentation.startTime} + ' - ' + ${presentation.endTime}"></div>
+                                <div class="text-sm text-gray-700">
+                                    Speakers:
+                                    <span th:each="speaker, iterStat : ${presentation.speakers}">
                                         <span th:text="${speaker.title} + ' ' + ${speaker.name} + ' ' + ${speaker.surname}"></span>
                                         <span th:if="!${iterStat.last}">, </span>
                                     </span>
-                            </div>
+                                </div>
                             </a>
                         </li>
                     </ul>
@@ -60,17 +60,13 @@
             </tbody>
         </table>
 
-
-
-
-
-
         <a href="/conferences" class="text-blue-500 hover:underline mt-10">Back to all conferences</a>
+
 
         <div class="mt-10 flex space-x-4">
             <!-- Edit Button -->
             <a th:href="@{/conferences/edit/{id}(id=${conference.id})}"
-                style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;">
+               style="background-color: dodgerblue; color: white; padding: 7px; border-radius: 5px;">
                 Edit
             </a>
 
@@ -84,16 +80,17 @@
                 </button>
             </form>
             <a th:href="@{/presentations/create-presentation(conferenceId=${conference.id})}"
-                style="background-color: darkorange; color: white; padding: 7px; border-radius: 5px;">
+               style="background-color: darkorange; color: white; padding: 7px; border-radius: 5px;">
                 Create Presentation
             </a>
             <a th:href="@{/submissions/submission-form(conferenceId=${conference.id})}"
                style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
                 Submit Paper
             </a>
-            <a th:href="@{/schedules/create(conferenceId=${conference.id})}"
+
+            <a th:href="@{/submissions}"
                style="background-color: green; color: white; padding: 7px; border-radius: 5px;">
-                Create Schedule
+                Check submissions
             </a>
 
             <form th:action="@{/registrations}" method="post" th:if="${!isRegistered}">
