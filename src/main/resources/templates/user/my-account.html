@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{fragments/header :: header}"></div>
+<body class="flex flex-col min-h-screen">
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="flex-grow">
+  <div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">My account</h1>
+    <h2 class="text-xl  mb-4">Here you can view your information, submitted papers and conferences you have registered to.</h2>
+
+    <div class="grid grid-cols-[150px_1fr] gap-y-4 text-lg mb-8">
+      <div class="text-gray-600">Name:</div>
+      <div class="font-bold" th:text="${user.name}">Name</div>
+
+      <div class="text-gray-600">Surname:</div>
+      <div class="font-bold" th:text="${user.surname}">Surname</div>
+
+      <div class="text-gray-600 self-start">Title:</div>
+      <div class="font-bold" th:text="${user.title}">Title</div>
+
+      <div class="text-gray-600 self-start">Institution:</div>
+      <div class="font-bold" th:text="${user.institution.name}">Institution</div>
+
+      <div class="text-gray-600 self-start">Phone number:</div>
+      <div class="font-bold" th:text="${user.phone}">Phone</div>
+
+      <div class="text-gray-600 self-start">Email:</div>
+      <div class="font-bold" th:text="${user.email}">Email</div>
+
+      </div>
+
+    <div>
+      <a th:href="@{/users/updateUser/{id}(id =${user.id})}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Update my information
+      </a>
+    </div>
+
+
+    <div class="relative mt-6">
+      <details class="group">
+        <summary class="flex cursor-pointer items-center gap-2 border-b border-gray-400 pb-1 text-gray-900 transition hover:border-gray-600">
+          <span class="text-lg font-medium">My Registrations</span>
+          <span class="transition group-open:rotate-180">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </span>
+        </summary>
+
+        <!-- Dropdown content -->
+        <div class="mt-1.5 space-y-1.5">
+          <div th:if="${user != null and registrations.size() > 0}">
+            <ul class="border rounded-md shadow-sm p-2 bg-white">
+              <li th:each="registration : ${registrations}" class="p-2  border-b border-b-gray-400">
+                <a th:href="@{'/conferences/' + ${registration.conference.id}}" class="block hover:text-blue-500">
+                  <span th:text="${registration.conference.name}">Conference Name</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div th:if="${user == null or registrations.size() == 0}" class="p-2 text-gray-500">
+            You have not registered to any conferences yet.
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="relative mt-6">
+
+      <details class="group">
+        <summary class="flex cursor-pointer items-center gap-2 border-b border-gray-400 pb-1 text-gray-900 transition hover:border-gray-600">
+          <span class="text-lg font-medium">My Submissions</span>
+          <span class="transition group-open:rotate-180">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </span>
+        </summary>
+
+        <!-- Dropdown content -->
+        <div class="mt-1.5 space-y-1.5">
+          <div th:if="${user != null and submissions.size() > 0}">
+            <ul class="border rounded-md shadow-sm p-2 bg-white">
+              <li th:each="submission : ${submissions}" class="p-2 hover:bg-gray-100 border-b border-b-gray-400">
+                <a th:href="@{'/submissions/' + ${submission.id}}" class="block hover:text-blue-500">
+                  <span th:text="${submission.paperTitle}">Submission title</span>
+                  <br>
+                  <span th:text="'Status: ' + ${submission.status}">Submission status</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div th:if="${user == null or submissions.size() == 0}" class="p-2 text-gray-500">
+            You have not submitted any papers yet.
+          </div>
+        </div>
+        </details>
+    </div>
+  </div>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
