@@ -35,7 +35,8 @@ class SecurityConfig(private val customUserDetailsService: CustomUserDetailsServ
                     "/conferences","/conferences/**",
                     "/presentations", "/presentations/**",
                     "/institutions", "/institutions/**",
-                    "/submissions", "/submissions/**").permitAll() // Public pages (registration, login, static files)
+                    "/submissions", "/submissions/**").permitAll()
+                .requestMatchers("/users/my-account/**", "/users/**").authenticated()// Public pages (registration, login, static files)
                 .requestMatchers("/**").hasRole("ADMIN") // Admin-only access
                 .anyRequest().authenticated() // Require authentication for everything else
             }

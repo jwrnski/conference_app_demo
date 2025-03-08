@@ -70,7 +70,7 @@
                     <option disabled selected hidden value="">-- Select Date --</option>
                     <option th:each="schedule : ${schedules}"
                             th:value="${schedule.id}"
-                            th:text="${schedule.startDate}"
+                            th:text="${schedule.startDate} + ' (' + ${schedule.startDate.dayOfWeek.toString()} + ')'"
                             th:selected="${selectedSchedule?.id == schedule.id}"
                     ></option>
                 </select>

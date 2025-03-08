@@ -29,6 +29,10 @@ class UserController(private val userService: UserService) {
         val userId = userService.getLoggedInUserId()
         val user = userService.findById(userId)
         model.addAttribute("user", user)
+        val activeRegistrations = user.registrations.filter { it.active }
+        model.addAttribute("registrations", activeRegistrations)
+        val submissions = user.submissions
+        model.addAttribute("submissions", submissions)
         return "user/my-account"
     }
 
@@ -49,6 +53,14 @@ class UserController(private val userService: UserService) {
     fun deleteUserById(@PathVariable id: Long): ResponseEntity<Void> {
         userService.deleteById(id)
         return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/edit-user")
+    fun editUserPage(model: Model): String {
+        val userId = userService.getLoggedInUserId()
+        val user = userService.findById(userId)
+        model.addAttribute("user", user)
+        return "user/edit-user"
     }
 
     @PutMapping("/{id}")
