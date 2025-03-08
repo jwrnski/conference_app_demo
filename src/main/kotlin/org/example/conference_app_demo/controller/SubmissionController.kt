@@ -93,11 +93,10 @@ class SubmissionController(
     }
 
     @DeleteMapping("/{id}")
-    fun deleteSubmissionById(@PathVariable id: Long): ResponseEntity<Void> {
+    fun deleteSubmissionById(@PathVariable id: Long): String {
         submissionService.deleteById(id)
-        return ResponseEntity.noContent().build()
+        return "redirect:/user/my-account"
     }
-
 
     @PutMapping()
     fun updateStatus(@RequestParam submissionId: Long,

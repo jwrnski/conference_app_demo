@@ -49,16 +49,20 @@ class AuthController(private val userService: UserService,
 
     @PostMapping("/login")
     fun loginUser(@RequestParam email: String, @RequestParam password: String): String {
-        val user = userService.findByEmail(email)
-        return if(user != null && passwordEncoder.matches(password, user.password)) {
-            "redirect:/conferences"
-        } else {
-            "redirect:/auth/login"
+        val user = userService.findByEmail(email) ?: return "redirect:/auth/login?error=invalid_credentials"
+
+        if(!passwordEncoder.matches(password, user.password)) {
+            return "redirect:/auth/login?error=invalid_credentials"
         }
+
+        return "redirect:/conferences"
+
     }
 
     @GetMapping("/login")
-    fun showLoginPage(): String {
+    fun showLoginPage(model: Model, @RequestParam(required = false) error: String?): String {
+        if(error != null)
+            model.addAttribute("errorMessage", "Invalid email or password. Please try again.")
         return "auth/login"
     }
 
